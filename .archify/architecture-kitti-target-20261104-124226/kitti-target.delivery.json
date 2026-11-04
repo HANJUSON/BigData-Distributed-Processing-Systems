@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "bf6a8123-3fd7-47d2-a82e-eec118f31095",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/candidate.json",
+  "output": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/kitti-target.html",
+  "specification": {
+    "sha256": "c9f2aaa7b136d8efad9d56d82f95271e464198e5eff67ba902a44fc38dce5871",
+    "bytes": 6704
+  },
+  "artifact": {
+    "sha256": "fb8e7ea7567ca8648c19298c4840843c6a0a654f489e545ff4a7d4c9cdad9093",
+    "bytes": 860813
+  }
+}

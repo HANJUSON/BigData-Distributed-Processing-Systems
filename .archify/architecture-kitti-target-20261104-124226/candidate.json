@@ -1,0 +1,293 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "KITTI 목표 시스템 아키텍처 · 구현 전 설계",
+    "locale": "ko",
+    "output": ".archify/architecture-kitti-target-20261104-124226/kitti-target.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "analyst",
+      "type": "external",
+      "label": "분석 사용자",
+      "sublabel": "조건 입력 · 장면 선택",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        150,
+        74
+      ]
+    },
+    {
+      "id": "scene-web",
+      "type": "frontend",
+      "label": "장면 탐색 웹 앱",
+      "sublabel": "이미지 · LiDAR · 정답",
+      "pos": [
+        320,
+        40
+      ],
+      "size": [
+        220,
+        74
+      ]
+    },
+    {
+      "id": "scene-query",
+      "type": "backend",
+      "label": "장면 검색 모듈",
+      "sublabel": "Spark SQL · 조건 필터",
+      "pos": [
+        320,
+        270
+      ],
+      "size": [
+        220,
+        74
+      ]
+    },
+    {
+      "id": "raw-files",
+      "type": "database",
+      "label": "KITTI 원본 파일",
+      "sublabel": "학습 7,481개 장면 · 4종 파일",
+      "pos": [
+        720,
+        40
+      ],
+      "size": [
+        250,
+        74
+      ]
+    },
+    {
+      "id": "ingestion",
+      "type": "backend",
+      "label": "수집·정제 모듈",
+      "sublabel": "파일 연결 · 검사 · 변환",
+      "pos": [
+        1300,
+        40
+      ],
+      "size": [
+        230,
+        74
+      ]
+    },
+    {
+      "id": "base-parquet",
+      "type": "database",
+      "label": "기본 Parquet",
+      "sublabel": "frames · objects · points",
+      "pos": [
+        1300,
+        270
+      ],
+      "size": [
+        230,
+        74
+      ]
+    },
+    {
+      "id": "search-data",
+      "type": "database",
+      "label": "검색·분석 데이터",
+      "sublabel": "frames · 객체 특징 · 통계",
+      "pos": [
+        720,
+        270
+      ],
+      "size": [
+        250,
+        74
+      ]
+    },
+    {
+      "id": "spark-analysis",
+      "type": "backend",
+      "label": "Spark 배치 분석",
+      "sublabel": "수치 처리 · 결합 · 집계",
+      "pos": [
+        970,
+        510
+      ],
+      "size": [
+        230,
+        84
+      ]
+    },
+    {
+      "id": "validation",
+      "type": "backend",
+      "label": "검증 모듈",
+      "sublabel": "순차 처리 대조 · 반복 측정",
+      "pos": [
+        1300,
+        730
+      ],
+      "size": [
+        250,
+        84
+      ]
+    },
+    {
+      "id": "validation-output",
+      "type": "database",
+      "label": "검증 산출물",
+      "sublabel": "정확성 결과 · 성능표/그래프",
+      "pos": [
+        320,
+        730
+      ],
+      "size": [
+        220,
+        84
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "단일 장비 · 로컬 파일시스템 / Python / Spark",
+      "wraps": [
+        "scene-web",
+        "scene-query",
+        "raw-files",
+        "ingestion",
+        "base-parquet",
+        "search-data",
+        "spark-analysis",
+        "validation",
+        "validation-output"
+      ],
+      "pad": 20
+    }
+  ],
+  "connections": [
+    {
+      "id": "edge-0",
+      "from": "analyst",
+      "to": "scene-web",
+      "label": "조건 입력"
+    },
+    {
+      "id": "edge-1",
+      "from": "scene-web",
+      "to": "analyst",
+      "label": "화면 표시"
+    },
+    {
+      "id": "edge-2",
+      "from": "scene-web",
+      "to": "scene-query",
+      "label": "검색 조건"
+    },
+    {
+      "id": "edge-3",
+      "from": "scene-query",
+      "to": "scene-web",
+      "label": "장면 목록"
+    },
+    {
+      "id": "edge-4",
+      "from": "raw-files",
+      "to": "scene-web",
+      "label": "선택 장면"
+    },
+    {
+      "id": "edge-5",
+      "from": "raw-files",
+      "to": "ingestion",
+      "label": "원본 읽기"
+    },
+    {
+      "id": "edge-6",
+      "from": "ingestion",
+      "to": "base-parquet",
+      "label": "변환 저장"
+    },
+    {
+      "id": "edge-7",
+      "from": "base-parquet",
+      "to": "search-data",
+      "label": "frames 참조"
+    },
+    {
+      "id": "edge-8",
+      "from": "base-parquet",
+      "to": "spark-analysis",
+      "label": "분석 입력"
+    },
+    {
+      "id": "edge-9",
+      "from": "spark-analysis",
+      "to": "search-data",
+      "label": "특징·통계 저장"
+    },
+    {
+      "id": "edge-10",
+      "from": "search-data",
+      "to": "scene-query",
+      "label": "SQL 조회"
+    },
+    {
+      "id": "edge-11",
+      "from": "base-parquet",
+      "to": "validation",
+      "label": "고정 표본"
+    },
+    {
+      "id": "edge-12",
+      "from": "validation",
+      "to": "spark-analysis",
+      "label": "실행·측정"
+    },
+    {
+      "id": "edge-13",
+      "from": "search-data",
+      "to": "validation",
+      "label": "결과 대조"
+    },
+    {
+      "id": "edge-14",
+      "from": "validation",
+      "to": "validation-output",
+      "label": "검증 결과"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "포함 범위와 근거",
+      "items": [
+        "README 6~7절과 제출 제안서를 구체화한 목표 설계이며 구현 완료를 뜻하지 않습니다.",
+        "정제 → 배치 분석 → 조건 검색·장면 표시를 단일 장비에서 수행합니다.",
+        "수집·정제 모듈은 누락·중복·비정상 좌표와 품질 보고서를 기록합니다."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "SQL과 수치 처리",
+      "items": [
+        "SQL: 테이블 결합, 격자·조건별 집계, 객체 조건 필터와 중복 없는 장면 조회.",
+        "수치 처리: 보정 좌표 변환과 3D 박스 내부 포인트 계산을 프레임별로 실행합니다.",
+        "검색·분석 데이터의 frames는 기본 Parquet 참조이며 객체 특징·통계는 배치 결과입니다.",
+        "같은 객체가 모든 조건을 만족하는 장면을 찾고 저장된 특징을 재사용합니다."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "검증과 범위 경계",
+      "items": [
+        "100·1,000·7,481개 장면에서 Python 순차 처리와 Spark local[1/4/8]을 각 3회 실행합니다.",
+        "동일 표본·입력·집계 정의로 정확성과 시간·처리량·메모리를 비교합니다.",
+        "좌표·박스 계산은 표본 시각화로 검증하고 초기화·입출력 측정 범위를 기록합니다.",
+        "모델 학습·추론 평가, 실시간 차량 제어, 다중 노드 운영, 상용화는 이번 범위 밖입니다."
+      ]
+    }
+  ]
+}

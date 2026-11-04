@@ -1,0 +1,98 @@
+{
+  "course_id": 100558,
+  "course": "빅데이터분산처리시스템",
+  "fetched_at": "2026-10-20T11:33:41.644668+09:00",
+  "checked_locations": {
+    "announcements": 2,
+    "assignments": 16,
+    "boards": [
+      {
+        "id": 72637,
+        "title": "강의자료실",
+        "posts": 0,
+        "pages": 1
+      }
+    ],
+    "weekly_modules": 16
+  },
+  "sources": [
+    {
+      "kind": "assignments",
+      "id": 251224,
+      "title": "Final Project Presentation",
+      "source_url": "https://canvas.korea.ac.kr/courses/100558/assignments/251224",
+      "created_at": "2026-08-25T06:39:37Z",
+      "updated_at": "2026-08-25T06:40:48Z",
+      "due_at": "2026-12-08T00:00:00Z",
+      "due_at_kst": "2026-12-08 09:00:00 KST",
+      "file_ids": [],
+      "attachments": [],
+      "saved_as": "공지/assignments_251224_Final_Project_Presentation.md",
+      "saved_sha256": "9956994c2cda3f7bded4f9b502bd663c7388bb12a6e3658171aa52e137f786f3",
+      "source_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "assignments",
+      "id": 251225,
+      "title": "Final Project Report Submission",
+      "source_url": "https://canvas.korea.ac.kr/courses/100558/assignments/251225",
+      "created_at": "2026-08-25T06:41:11Z",
+      "updated_at": "2026-08-25T06:43:46Z",
+      "due_at": "2026-12-15T14:59:59Z",
+      "due_at_kst": "2026-12-15 23:59:59 KST",
+      "file_ids": [],
+      "attachments": [],
+      "saved_as": "공지/assignments_251225_Final_Project_Report_Submission.md",
+      "saved_sha256": "8c61c1c40be4d442e1f2243b2e1973e3ecb4b1569dcc7ee57ebb68f89d4e8f27",
+      "source_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "weekly_attachment",
+      "id": null,
+      "title": "FinalProject.pdf",
+      "source_url": null,
+      "created_at": null,
+      "updated_at": null,
+      "due_at": null,
+      "due_at_kst": null,
+      "file_ids": [
+        5867202
+      ],
+      "attachments": [
+        "FinalProject.pdf"
+      ],
+      "module_title": "8주차"
+    },
+    {
+      "kind": "assignments",
+      "id": 252558,
+      "title": "Proposal submission",
+      "source_url": "https://canvas.korea.ac.kr/courses/100558/assignments/252558",
+      "created_at": "2026-09-01T04:26:32Z",
+      "updated_at": "2026-09-01T04:27:14Z",
+      "due_at": "2026-10-21T14:59:59Z",
+      "due_at_kst": "2026-10-21 23:59:59 KST",
+      "file_ids": [],
+      "attachments": [],
+      "saved_as": "공지/assignments_252558_Proposal_submission.md",
+      "saved_sha256": "24ca7f2e5af349f65c2baca6c5634867adebe6ed8865ad3456fffe0d78c88c6f",
+      "source_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "attachments": [
+    {
+      "path": "FinalProject.pdf",
+      "canvas_file_ids": [
+        5867202
+      ],
+      "bytes": 77305,
+      "sha256": "681791369ff9a751cc94c2e7a8f3fd8683023d3e3ecc1cb4a2f4af0ac049e859",
+      "pages": 1,
+      "method": "reused_existing_file",
+      "source_url": "https://canvas.korea.ac.kr/courses/100558/files/5867202",
+      "existing_source": "빅데이터분산처리시스템/FinalProject.pdf"
+    }
+  ],
+  "readme_sha256": "cd2a615fbc1ad366ba96d65b2508a42373d7a72e0b6c568b0d262008ae307168",
+  "notes": "토큰·세션 쿠키·파일 verifier는 저장하지 않음. 동일 내용 첨부는 한 파일로 모음. 기존 파일은 재사용하고 원래 경로도 유지함."
+}

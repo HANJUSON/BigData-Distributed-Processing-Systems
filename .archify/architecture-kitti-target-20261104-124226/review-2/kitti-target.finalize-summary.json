@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/candidate.json",
+    "sha256": "c9f2aaa7b136d8efad9d56d82f95271e464198e5eff67ba902a44fc38dce5871",
+    "bytes": 6704
+  },
+  "artifact": {
+    "path": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/kitti-target.html",
+    "sha256": "fb8e7ea7567ca8648c19298c4840843c6a0a654f489e545ff4a7d4c9cdad9093",
+    "bytes": 860813
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/review-2/kitti-target.finalize.json",
+    "summaryReceipt": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/review-2/kitti-target.finalize-summary.json",
+    "browserCheckReceipt": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/review-2/kitti-target.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-04T03:42:31.431Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 3659,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

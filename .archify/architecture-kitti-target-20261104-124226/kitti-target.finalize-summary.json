@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/candidate.json",
+    "sha256": "5268d528604539d613853f4bdacb7212ac8cf3b604b5094032866ea9948726f8",
+    "bytes": 6704
+  },
+  "artifact": {
+    "path": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/kitti-target.html",
+    "sha256": "7affc742996365fe6b520e56261c53df94604268d10e137fb34811c8672c8b53",
+    "bytes": 860768
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/kitti-target.finalize.json",
+    "summaryReceipt": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/kitti-target.finalize-summary.json",
+    "browserCheckReceipt": "/run/media/hanjuson/Windows-SSD/손한주/04Lecture/빅데이터분산처리시스템/finalproject/.archify/architecture-kitti-target-20261104-124226/kitti-target.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-04T03:42:31.431Z",
+    "source": "network",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 3815,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  },
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "resolvedCrossovers": 1
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [
+        {
+          "left": {
+            "id": "edge-9",
+            "from": "spark-analysis",
+            "to": "search-data",
+            "label": "특징·통계 저장",
+            "collectionIndex": 9,
+            "artifactIndex": 10
+          },
+          "right": {
+            "id": "edge-11",
+            "from": "base-parquet",
+            "to": "validation",
+            "label": "고정 표본",
+            "collectionIndex": 11,
+            "artifactIndex": 12
+          },
+          "point": [
+            954,
+            415
+          ]
+        }
+      ],
+      "detours": [],
+      "truncated": false
+    },
+    "hints": [
+      "spark-analysis → search-data crosses base-parquet → validation: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
+  }
+}
