@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "macros/feedback.html" import empty_state, error_state %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h1 class="visually-hidden">{{ title }}</h1>
+{%- if details is defined and details %}
+{{ error_state(title, body, details=details, retry_href=retry_href) }}
+<p style="text-align: center; margin-top: var(--space-4);"><a class="btn btn--secondary" href="{{ url_for('pages.search') }}">장면 검색으로 가기</a></p>
+{%- else %}
+{% call empty_state(title, body) %}
+  <a class="btn btn--primary" href="{{ url_for('pages.search') }}">장면 검색으로 가기</a>
+{% endcall %}
+{%- endif %}
+<p class="muted small" style="text-align: center; margin-top: var(--space-4);">오류 코드 <span class="num">{{ code }}</span></p>
+{% endblock %}

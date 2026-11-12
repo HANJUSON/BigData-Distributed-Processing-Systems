@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S3 검수 세트 · 와이어프레임</title>
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <h1>S3 검수 세트 <span class="mono muted">/review-sets</span></h1>
+    <span class="meta">질문: “검수할 장면 묶음과 진행 상황은?” · 소속 <b>데이터베이스 과목</b>(FR-3·FR-4) · 데이터 MySQL <code>v_set_progress</code> · 기준 DB README ‘UI/UX 설계’ · <a href="README.md">목록</a></span>
+  </header>
+  <div class="layout">
+    <div>
+      <div class="frame">
+        <div class="wf-header">
+          <span class="wf-brand">KITTI Scene Explorer</span>
+          <nav class="wf-nav"><span>장면 검색</span><span class="on">검수</span><span>분석</span><span>처리 결과</span><span>정보</span></nav>
+          <div class="wf-tools"><span class="btn">손한주 ▾</span><span class="btn ghost">⌨</span><span class="btn ghost">◐</span></div>
+        </div>
+        <div style="padding:24px;position:relative;">
+          <div class="row" style="justify-content:space-between"><b style="font-size:18px">검수 세트</b><span class="row"><span class="btn primary">+ 표본 세트 만들기 (120건)</span><span class="m inline">1</span></span></div>
+          <div class="row" style="margin:12px 0"><span class="btn">진행 중 ▾</span><span class="btn">전체 종류 ▾</span></div>
+          <div class="box" style="padding:0;position:relative;">
+            <span class="m" style="left:-10px;top:-10px;">2</span>
+            <div class="row" style="padding:14px;border-bottom:1px solid var(--line);justify-content:space-between">
+              <b style="width:200px">원거리 가림 보행자</b><span class="badge">검색 · 진행 중</span>
+              <span style="flex:1;max-width:260px" class="row"><span style="flex:1;height:8px;background:var(--fill-2);border-radius:4px;position:relative"><i style="position:absolute;inset:0 47% 0 0;background:var(--ink);border-radius:4px"></i></span><span class="mono">64 / 120</span></span>
+              <span class="mono muted">11/18</span><span class="btn primary">이어서 검수 →</span><span class="btn ghost">⋯</span><span class="m inline">3</span>
+            </div>
+            <div class="row" style="padding:14px;justify-content:space-between">
+              <b style="width:200px">질문 3 표본</b><span class="badge">표본 · 마감</span>
+              <span style="flex:1;max-width:260px" class="row"><span style="flex:1;height:8px;background:var(--ink);border-radius:4px"></span><span class="mono">120 / 120</span></span>
+              <span class="mono muted">11/20</span><span class="btn">결과 보기</span><span class="btn ghost">⋯</span>
+            </div>
+          </div>
+
+          <h2 class="sec-title">판정 패널 (S2 오른쪽에 열림)</h2>
+          <div class="box" style="max-width:420px;position:relative;">
+            <span class="m" style="right:-10px;top:-10px;">4</span>
+            <div class="row" style="justify-content:space-between"><span>세트: 원거리 가림 보행자</span><span class="mono">64 / 120</span></div>
+            <p style="margin:8px 0 0"><b>객체 3 · 보행자 · 47.8 m · 일부 가림</b></p>
+            <p class="muted" style="margin:2px 0 10px">포인트 9개 ⚠ 관측 부족 (기준 12개, 11/18 산출)</p>
+            <div class="row"><span class="btn">(1) 정상</span><span class="btn">(2) 라벨 오류</span><span class="btn">(3) 관측 부족</span><span class="btn">(4) 기타</span></div>
+            <div class="input" style="margin:10px 0;height:48px">메모</div>
+            <div class="row"><span class="btn primary">저장하고 다음 (Enter)</span><span class="btn">건너뛰기 (N)</span></div>
+            <p class="muted" style="margin:10px 0 0">이력 ▸ 11/18 14:02 관측 부족 → 정상 (손한주)</p>
+          </div>
+        </div>
+        <div class="wf-footer"><span>데이터 출처 KITTI Vision Benchmark Suite · CC BY-NC-SA 3.0</span><span>용어 정의 · 출처 · 단축키 ?</span></div>
+      </div>
+      <p class="caption">이 저장소(빅데이터 과목)에서는 메뉴와 안내 화면만 제공합니다. 실제 화면은 DB 과목 프로젝트에서 구현합니다.</p>
+    </div>
+    <aside class="notes">
+      <h2>주석</h2>
+      <ol>
+        <li><span class="m inline">1</span><span>표본 세트는 한 번만. 이미 있으면 ‘표본 세트 열기’. 검색 세트는 S1 결과 위 ‘객체 2,031개로 세트 만들기’(0건이면 비활성 + 이유 툴팁).</span></li>
+        <li><span class="m inline">2</span><span>목록: 이름·종류·상태·진행 막대·완료/전체·만든 날짜. 진행 중이 위. 진행률은 <span class="mono">v_set_progress</span>가 준다.</span></li>
+        <li><span class="m inline">3</span><span>[⋯]: 마감(판정 잠김 안내)·삭제(세트 이름·항목 수, 판정·이력은 남는다는 안내) 확인 대화상자.</span></li>
+        <li><span class="m inline">4</span><span>판정 패널: <kbd>1</kbd>–<kbd>4</kbd> 선택, <kbd>Enter</kbd> 저장 후 다음 미검수, <kbd>N</kbd> 건너뛰기. 기본 선택 없음. 판정 삭제는 5초 ‘되돌리기’.</span></li>
+      </ol>
+      <dl class="states">
+        <dt>빈 결과</dt><dd>“아직 검수 세트가 없습니다. 장면 검색 결과로 세트를 만들어 보세요.”</dd>
+        <dt>오류(NR-4)</dt><dd>“마감된 세트라 판정을 저장할 수 없습니다…” 등 문구표의 안내 문구, 원문은 ‘자세히’.</dd>
+        <dt>잠김</dt><dd>검수자 미선택·세트 마감 시 패널 비활성 + 이유 한 줄.</dd>
+      </dl>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

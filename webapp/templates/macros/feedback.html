@@ -1,0 +1,111 @@
+{#- 피드백·상태 컴포넌트: 툴팁, 알림 영역, 스켈레톤, 빈 상태, 오류 상태, 안내 띠, 진행 표시줄 (9.5). -#}
+{% from "macros/icons.html" import icon %}
+
+{#- ⓘ 툴팁. 버튼에 포커스·호버하면 보이고, 화면 낭독기는 aria-describedby로 읽는다. -#}
+{% macro tooltip(id, text, label="도움말", placement="top") -%}
+<span class="tip-host">
+  <button type="button" class="tip-trigger" aria-label="{{ label }}" aria-describedby="{{ id }}">{{ icon("info", 14) }}</button>
+  <span class="tip tip--{{ placement }}" role="tooltip" id="{{ id }}">{{ text }}</span>
+</span>
+{%- endmacro %}
+
+{#- 알림 영역: 화면 오른쪽 아래, 4초 (9.5). JS: KSE.toast(message, {tone, action}) -#}
+{% macro toast_region() -%}
+<div class="toast-region" id="toast-region" role="status" aria-live="polite" aria-atomic="false"></div>
+{%- endmacro %}
+
+{#- 정적 알림 한 개 (갤러리·서버 렌더용) -#}
+{% macro toast(message, tone="ok", action=None) -%}
+<div class="toast toast--{{ tone }}">
+  <span class="toast__icon" aria-hidden="true">{% if tone == "ok" %}✓{% elif tone == "danger" %}✕{% else %}ⓘ{% endif %}</span>
+  <span class="toast__msg">{{ message }}</span>
+  {%- if action %}<button type="button" class="toast__action">{{ action }}</button>{% endif %}
+</div>
+{%- endmacro %}
+
+{#- 결과 카드 모양 스켈레톤 (300 ms 이후에만 보이게: .skeleton-delay) -#}
+{% macro skeleton_cards(n=4, label=None) -%}
+<div class="skeleton-group skeleton-delay" aria-busy="true">
+  <span class="visually-hidden" role="status">{{ label or ko.STATE_MESSAGES.loading_results }}</span>
+  <div class="card-grid">
+    {%- for _ in range(n) %}
+    <div class="skel-card" aria-hidden="true">
+      <div class="skel skel--thumb"></div>
+      <div class="skel-card__body">
+        <div class="skel skel--line" style="width: 40%"></div>
+        <div class="skel skel--line" style="width: 72%"></div>
+      </div>
+    </div>
+    {%- endfor %}
+  </div>
+</div>
+{%- endmacro %}
+
+{% macro skeleton_lines(n=3) -%}
+<div class="skeleton-group" aria-hidden="true">
+  {%- for i in range(n) %}<div class="skel skel--line" style="width: {{ [92, 76, 58, 84][i % 4] }}%"></div>{% endfor %}
+</div>
+{%- endmacro %}
+
+{#- 진행 표시줄 (BEV 로딩). value=None이면 불확정 -#}
+{% macro progress(label, value=None, id=None) -%}
+<div class="progress" {% if id %}id="{{ id }}"{% endif %}>
+  <div class="progress__label">{{ label }}</div>
+  <div class="progress__bar" role="progressbar" aria-label="{{ label }}" aria-valuemin="0" aria-valuemax="100"{% if value is not none %} aria-valuenow="{{ value }}"{% endif %}>
+    <span class="progress__fill{% if value is none %} is-indeterminate{% endif %}" style="width: {{ value if value is not none else 40 }}%"></span>
+  </div>
+</div>
+{%- endmacro %}
+
+{#- 빈 상태: 이유 + 다음 행동. caller()로 추가 행동(프리셋 등)을 넣는다. -#}
+{% macro empty_state(title, body=None, compact=False) -%}
+<section class="state state--empty{% if compact %} state--compact{% endif %}" aria-live="polite">
+  <div class="state__glyph" aria-hidden="true">{{ icon("search", 28) }}</div>
+  <h3 class="state__title">{{ title }}</h3>
+  {%- if body %}<p class="state__body">{{ body }}</p>{% endif %}
+  {%- if caller %}<div class="state__actions">{{ caller() }}</div>{% endif %}
+</section>
+{%- endmacro %}
+
+{#- 오류 상태: 무엇이 → 왜 → 어떻게. 기술 정보는 ‘자세히’ 안에. ‘다시 시도’ 버튼. -#}
+{% macro error_state(title, body, details=None, retry_href=None, compact=False) -%}
+<section class="state state--error{% if compact %} state--compact{% endif %}" role="alert">
+  <div class="state__glyph" aria-hidden="true">{{ icon("alert", 28) }}</div>
+  <h3 class="state__title">{{ title }}</h3>
+  <p class="state__body">{{ body }}</p>
+  <div class="state__actions">
+    {%- if retry_href %}
+    <a class="btn btn--secondary" href="{{ retry_href }}">{{ icon("refresh") }}<span>{{ ko.STATE_MESSAGES.retry }}</span></a>
+    {%- else %}
+    <button type="button" class="btn btn--secondary" data-retry>{{ icon("refresh") }}<span>{{ ko.STATE_MESSAGES.retry }}</span></button>
+    {%- endif %}
+  </div>
+  {%- if details %}
+  <details class="state__details">
+    <summary>{{ ko.STATE_MESSAGES.error_details }}</summary>
+    <pre><code>{{ details }}</code></pre>
+  </details>
+  {%- endif %}
+</section>
+{%- endmacro %}
+
+{#- 부분 성공: 되는 부분은 보여주고 이 블록이 실패한 영역만 대신한다. -#}
+{% macro partial_state(message, dark=False) -%}
+<div class="state state--partial{% if dark %} state--on-viz{% endif %}" role="status">
+  <span class="state__glyph" aria-hidden="true">{{ icon("alert", 22) }}</span>
+  <p class="state__body">{{ message }}</p>
+</div>
+{%- endmacro %}
+
+{#- 한 줄 안내 띠: tone = info | warn | danger | ok -#}
+{% macro notice(text, tone="info", title=None, id=None) -%}
+<div class="notice notice--{{ tone }}"{% if id %} id="{{ id }}"{% endif %} role="note">
+  <span class="notice__icon" aria-hidden="true">{% if tone == "warn" %}⚠{% elif tone == "danger" %}✕{% elif tone == "ok" %}✓{% else %}ⓘ{% endif %}</span>
+  <p class="notice__text">{% if title %}<strong>{{ title }}</strong> {% endif %}{{ text }}</p>
+</div>
+{%- endmacro %}
+
+{#- 데모 데이터 표시 띠 (S1·S2·S5) -#}
+{% macro demo_notice() -%}
+{{ notice(ko.UI.demo_notice, "warn", ko.UI.demo_badge) }}
+{%- endmacro %}

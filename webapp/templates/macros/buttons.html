@@ -1,0 +1,30 @@
+{#-
+  버튼 3종 (주·보조·위험) + 아이콘 버튼.
+  - 동작을 이름으로 쓴다(9.10): ‘프리셋 저장’ ○ / ‘저장’ ✕
+  - disabled_reason을 주면 aria-disabled로 두고 이유를 툴팁·설명으로 연결한다
+    (disabled 속성은 포커스가 안 가서 이유를 읽을 수 없기 때문).
+-#}
+{% from "macros/icons.html" import icon %}
+
+{% macro button(label, variant="primary", type="button", icon_name=None, href=None, size="md",
+                disabled=False, disabled_reason=None, id=None, attrs={}) -%}
+{%- set classes = "btn btn--" ~ variant ~ (" btn--sm" if size == "sm" else "") -%}
+{%- set reason_id = (id or ("btn-" ~ (label|string)|replace(" ", "-")|lower)) ~ "-why" -%}
+{%- if href and not disabled and not disabled_reason -%}
+<a class="{{ classes }}" href="{{ href }}"{% if id %} id="{{ id }}"{% endif %}{% for k, v in attrs.items() %} {{ k }}="{{ v }}"{% endfor %}>
+  {%- if icon_name %}{{ icon(icon_name) }}{% endif %}<span>{{ label }}</span></a>
+{%- else -%}
+<span class="btn-wrap{% if disabled_reason %} has-tip{% endif %}">
+<button class="{{ classes }}" type="{{ type }}"{% if id %} id="{{ id }}"{% endif %}
+  {%- if disabled %} disabled{% endif %}
+  {%- if disabled_reason %} aria-disabled="true" aria-describedby="{{ reason_id }}" data-blocked{% endif %}
+  {%- for k, v in attrs.items() %} {{ k }}="{{ v }}"{% endfor %}>
+  {%- if icon_name %}{{ icon(icon_name) }}{% endif %}<span>{{ label }}</span></button>
+{%- if disabled_reason %}<span class="tip" role="tooltip" id="{{ reason_id }}">{{ disabled_reason }}</span>{% endif -%}
+</span>
+{%- endif -%}
+{%- endmacro %}
+
+{% macro icon_button(label, icon_name, variant="ghost", id=None, attrs={}) -%}
+<button class="btn btn--{{ variant }} btn--icon" type="button" aria-label="{{ label }}" title="{{ label }}"{% if id %} id="{{ id }}"{% endif %}{% for k, v in attrs.items() %} {{ k }}="{{ v }}"{% endfor %}>{{ icon(icon_name, 18) }}</button>
+{%- endmacro %}

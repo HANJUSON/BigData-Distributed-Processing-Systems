@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% from "macros/badges.html" import cls_tag, difficulty, low_obs %}
+{% from "macros/feedback.html" import error_state %}
+
+{% block title %}정보{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="page-head__eyebrow">S6 · 정보</p>
+    <h1>용어 정의와 데이터 출처</h1>
+    <p class="page-head__q">이 앱의 숫자는 무엇을 뜻하고, 데이터는 어디서 왔나요?</p>
+  </div>
+</div>
+
+<div class="about">
+  <nav class="toc" aria-label="이 페이지의 목차">
+    <ol role="list">
+      <li><a href="#terms">용어 정의</a></li>
+      <li><a href="#difficulty">난이도 기준</a></li>
+      <li><a href="#classes">객체 종류와 색</a></li>
+      <li><a href="#source">데이터 출처·라이선스</a></li>
+      <li><a href="#project">프로젝트 정보</a></li>
+      <li><a href="#software">사용한 글꼴·라이브러리</a></li>
+    </ol>
+  </nav>
+
+  <div class="prose">
+    {# ------------------------------------------------------------ 용어 #}
+    <section aria-labelledby="terms">
+      <h2 id="terms">용어 정의</h2>
+      <p class="muted">앱 전체에서 같은 단어는 같은 뜻으로 씁니다. 화면의 ⓘ 툴팁도 이 정의를 그대로 따릅니다.</p>
+      <dl class="defs" style="margin-top: var(--space-4);">
+        <div class="def">
+          <dt>장면<small>frame</small></dt>
+          <dd><p>KITTI 학습 데이터의 한 시점입니다. 왼쪽 카메라 이미지, LiDAR 점군, 객체 정답(라벨), 보정 정보 4종 파일을 6자리 장면 번호(예: <span class="mono">000123</span>)로 묶습니다. 이 앱은 정답이 있는 학습 장면 7,481개만 다룹니다.</p></dd>
+        </div>
+        <div class="def">
+          <dt>거리<small>F-7</small></dt>
+          <dd>
+            <p>카메라 좌표 기준 <strong>수평거리</strong>입니다. 라벨 <code>location</code>의 x(오른쪽), z(앞) 값으로 계산하며 단위는 m입니다. 높이(y)는 넣지 않습니다.</p>
+            <p class="formula">거리 = √(x² + z²)</p>
+            <p class="muted small">데이터베이스 과목의 거리 열과 같은 정의입니다. 화면에는 소수 1자리로 표시합니다(예: 31.0 m).</p>
+          </dd>
+        </div>
+        <div class="def">
+          <dt>가림<small>occluded 0–3</small></dt>
+          <dd>
+            <p>라벨에 적힌 가림 정도입니다.</p>
+            <div class="table-wrap" style="margin-top: var(--space-2);">
+              <table class="data-table data-table--compact">
+                <thead><tr><th scope="col" class="is-num">값</th><th scope="col">표시 이름</th><th scope="col">뜻</th></tr></thead>
+                <tbody>
+                  <tr><td class="is-num">0</td><td>{{ ko.OCCLUSION_LABELS[0] }}</td><td>완전히 보입니다.</td></tr>
+                  <tr><td class="is-num">1</td><td>{{ ko.OCCLUSION_LABELS[1] }}</td><td>일부가 가려졌습니다.</td></tr>
+                  <tr><td class="is-num">2</td><td>{{ ko.OCCLUSION_LABELS[2] }}</td><td>대부분 가려졌습니다.</td></tr>
+                  <tr><td class="is-num">3</td><td>{{ ko.OCCLUSION_LABELS[3] }}</td><td>가림 정도를 알 수 없습니다.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </dd>
+        </div>
+        <div class="def">
+          <dt>잘림<small>truncated 0–1</small></dt>
+          <dd><p>객체가 이미지 경계 밖으로 나간 비율입니다. 0.00은 전부 이미지 안, 1.00은 전부 밖입니다. 값은 원본 그대로 보존하고 난이도 기준에 씁니다.</p></dd>
+        </div>
+        <div class="def">
+          <dt>3D 박스 유효<small>F-8</small></dt>
+          <dd><p>크기 h, w, l이 모두 양수이고 <code>location</code>의 z &gt; 0일 때 유효합니다. 무시 영역과 3D 박스가 유효하지 않은 객체는 포인트 수를 계산하지 않습니다.</p></dd>
+        </div>
+        <div class="def">
+          <dt>포인트 수<small>F-8</small></dt>
+          <dd>
+            <p>3D 정답 박스 안에 들어간 LiDAR 포인트 개수입니다. 보정 정보로 좌표를 맞춘 뒤 셉니다. 박스 경계 위의 점은 포함하며 경계 여유는 1e-6 m입니다.</p>
+            <p>계산하지 않은 객체는 <strong>{{ ko.UI.points_null }}</strong>으로 표시해 실제 0개와 구분합니다.</p>
+          </dd>
+        </div>
+        <div class="def">
+          <dt>관측 부족<small>F-9</small></dt>
+          <dd>
+            <p>{{ low_obs() }} 3D 박스가 유효한 객체 중, 포인트 수가 <strong>클래스별 포인트 수 하위 10% 값</strong>(기준값) 이하인 객체입니다. 장면 목록은 이런 객체가 하나 이상 있는 장면입니다.</p>
+            <p>기준값은 분포를 확인해 확정하며, 데이터베이스 과목의 기준값 표와 같은 값을 씁니다.</p>
+            {%- if thresholds_error is defined and thresholds_error %}
+            {{ error_state(ko.STATE_MESSAGES.db_error_title, ko.STATE_MESSAGES.thresholds_error, details=thresholds_error.details, retry_href=url_for('pages.about'), compact=True) }}
+            {%- else %}
+            <div class="table-wrap" style="margin-top: var(--space-2);">
+              <table class="data-table data-table--compact">
+                <caption>현재 기준값 · 산출 일시: {{ threshold_at }}</caption>
+                <thead><tr><th scope="col">클래스</th><th scope="col" class="is-num">기준값 (포인트)</th></tr></thead>
+                <tbody>
+                  {%- for cls, th in thresholds.items() %}<tr><td>{{ cls_tag(cls) }}</td><td class="is-num">{{ th|int }}</td></tr>{% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {%- if thresholds_demo %}
+            <p class="muted small">위 값은 레이아웃 검토용 데모 값입니다.</p>
+            {%- else %}
+            <p class="muted small">출처: MySQL 기준값 표(analysis_threshold, sp_thresholds). 포인트 수가 이 값 이하이면 관측 부족입니다.</p>
+            {%- endif %}
+            {%- endif %}
+          </dd>
+        </div>
+        <div class="def">
+          <dt>검색 의미</dt>
+          <dd><p>장면 검색은 <strong>한 객체가 입력한 조건을 모두 만족하는 장면</strong>을 찾습니다. 그래서 결과 수를 ‘장면 N개 · 객체 M개’로 함께 보여줍니다.</p></dd>
+        </div>
+      </dl>
+    </section>
+
+    {# ------------------------------------------------------------ 난이도 #}
+    <section aria-labelledby="difficulty">
+      <h2 id="difficulty">난이도 기준</h2>
+      <p>KITTI 공식 난이도 적격 기준입니다. 등급은 누적이라 ‘보통’ 적격에는 ‘쉬움’ 적격 객체도 포함됩니다. 어느 기준도 만족하지 않으면 ‘등급 외’입니다.</p>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th scope="col">난이도</th><th scope="col" class="is-num">2D 박스 높이</th><th scope="col" class="is-num">가림</th><th scope="col" class="is-num">잘림</th></tr></thead>
+          <tbody>
+            <tr><td>{{ difficulty(1) }}</td><td class="is-num">≥ 40 px</td><td class="is-num">≤ 0</td><td class="is-num">≤ 0.15</td></tr>
+            <tr><td>{{ difficulty(2) }}</td><td class="is-num">≥ 25 px</td><td class="is-num">≤ 1</td><td class="is-num">≤ 0.30</td></tr>
+            <tr><td>{{ difficulty(3) }}</td><td class="is-num">≥ 25 px</td><td class="is-num">≤ 2</td><td class="is-num">≤ 0.50</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {# ------------------------------------------------------------ 클래스 #}
+    <section aria-labelledby="classes">
+      <h2 id="classes">객체 종류와 색</h2>
+      <p>색각 이상에도 구분되는 Okabe–Ito 팔레트를 쓰고, 색 옆에는 항상 이름을 함께 적습니다. 같은 객체는 표·카메라 이미지·BEV에서 같은 색과 같은 번호로 보입니다.</p>
+      <ul class="legend-grid" role="list" style="margin-top: var(--space-4);">
+        {%- for key, meta in ko.CLASSES.items() %}
+        <li>{{ cls_tag(key) }}<small>{{ key }}</small></li>
+        {%- endfor %}
+      </ul>
+      <p class="muted small" style="margin-top: var(--space-3);">무시 영역(DontCare)은 평가에서 빼는 영역 표시라 회색 빗금으로 그리며, 장면 상세에서 기본으로 꺼 둡니다.</p>
+    </section>
+
+    {# ------------------------------------------------------------ 출처 #}
+    <section aria-labelledby="source">
+      <h2 id="source">데이터 출처·라이선스</h2>
+      <p><strong>KITTI Vision Benchmark Suite</strong> — 3D Object Detection 학습 데이터(왼쪽 카메라 이미지 <code>image_2</code>, LiDAR <code>velodyne</code>, 객체 라벨 <code>label_2</code>, 보정 <code>calib</code>).</p>
+      <p>이용 조건: <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="license noopener">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 (CC BY-NC-SA 3.0)</a>. 비상업적 학습 목적으로만 사용하며, 원본 데이터와 썸네일은 저장소에 올리지 않습니다.</p>
+      <p>A. Geiger, P. Lenz, R. Urtasun. “Are we ready for Autonomous Driving? The KITTI Vision Benchmark Suite.” <em>CVPR</em>, 2012. <a href="https://www.cvlibs.net/datasets/kitti/" rel="noopener">cvlibs.net/datasets/kitti</a></p>
+    </section>
+
+    {# ------------------------------------------------------------ 프로젝트 #}
+    <section aria-labelledby="project">
+      <h2 id="project">프로젝트 정보</h2>
+      <dl class="kv">
+        <dt>제목</dt><dd>KITTI 기반 자율주행 데이터 처리·인식 검증</dd>
+        <dt>학생</dt><dd>2022271315 손한주</dd>
+        <dt>과목</dt><dd>빅데이터분산처리시스템 (처리 결과 S5, 공통 화면) · 데이터베이스 (검수 S3, 분석 S4)</dd>
+        <dt>처리</dt><dd>단일 장비 Spark local 모드(<code>local[1]</code>·<code>local[4]</code>·<code>local[8]</code>), Parquet</dd>
+        <dt>서비스 DB</dt><dd>MySQL 8 (검색 프로시저·뷰), Flask 웹 앱</dd>
+      </dl>
+      <p class="muted small" style="margin-top: var(--space-4);">검수자는 시연용 식별자이며 로그인·권한 관리는 하지 않습니다.</p>
+    </section>
+
+    {# ------------------------------------------------------------ 소프트웨어 #}
+    <section aria-labelledby="software">
+      <h2 id="software">사용한 글꼴·라이브러리</h2>
+      <p>시연 장비가 오프라인일 수 있어 모든 파일을 앱에 포함했습니다(CDN 사용 안 함).</p>
+      <div class="table-wrap" style="margin-top: var(--space-3);">
+        <table class="data-table">
+          <thead><tr><th scope="col">이름</th><th scope="col">버전</th><th scope="col">라이선스</th></tr></thead>
+          <tbody>
+            <tr><td>Pretendard</td><td class="mono">1.3.9</td><td>SIL Open Font License 1.1</td></tr>
+            <tr><td>JetBrains Mono</td><td class="mono">@fontsource/jetbrains-mono 5.2.8</td><td>SIL Open Font License 1.1</td></tr>
+            <tr><td>Chart.js</td><td class="mono">4.4.9</td><td>MIT</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

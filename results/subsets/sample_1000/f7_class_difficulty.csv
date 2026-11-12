@@ -1,0 +1,9 @@
+class,n_objects,n_eligible_easy,n_eligible_moderate,n_eligible_hard,n_not_eligible
+Car,3979,839,2184,3013,966
+Van,416,61,192,288,128
+Truck,153,36,97,110,43
+Pedestrian,563,274,444,533,30
+Person_sitting,24,4,13,22,2
+Cyclist,225,87,148,163,62
+Tram,77,28,44,64,13
+Misc,130,35,83,108,22

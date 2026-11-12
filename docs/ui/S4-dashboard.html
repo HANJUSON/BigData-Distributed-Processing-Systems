@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S4 분석 대시보드 · 와이어프레임</title>
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <h1>S4 분석 대시보드 <span class="mono muted">/dashboard</span></h1>
+    <span class="meta">질문: “질문 1–4의 답은?” · 소속 <b>데이터베이스 과목</b>(FR-7) · 데이터 MySQL 뷰 <code>v_q1</code>–<code>v_q4</code> · <a href="README.md">목록</a></span>
+  </header>
+  <div class="layout">
+    <div>
+      <div class="frame">
+        <div class="wf-header">
+          <span class="wf-brand">KITTI Scene Explorer</span>
+          <nav class="wf-nav"><span>장면 검색</span><span>검수</span><span class="on">분석</span><span>처리 결과</span><span>정보</span></nav>
+          <div class="wf-tools"><span class="btn off">검수자 ▾</span><span class="btn ghost">⌨</span><span class="btn ghost">◐</span></div>
+        </div>
+        <div style="padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="box" style="position:relative;padding:14px">
+            <span class="m" style="left:-10px;top:-10px;">1</span>
+            <div class="label" style="margin-top:0">질문 1 관측 부족 기준</div>
+            <b style="font-size:16px">“보행자 기준은 12개로, 차량(48개)의 1/4”</b>
+            <div class="fill" style="height:140px;margin:10px 0;border-radius:4px;display:grid;place-items:center" >클래스 × 거리 구간 분위 막대 · 0점 객체 수</div>
+            <div class="row" style="border-top:1px dashed var(--line);padding-top:8px"><span class="muted">이 결과로 바뀐 것</span>기준값 · 산출 일시 <span class="btn">기준값 다시 계산</span><span class="m inline">2</span></div>
+          </div>
+          <div class="box" style="padding:14px">
+            <div class="label" style="margin-top:0">질문 2 몰린 조합</div>
+            <b style="font-size:16px">“원거리 · 일부 가림 · 보행자 조합이 1위”</b>
+            <table class="wf" style="margin:10px 0"><tr><th>조합</th><th>비율</th></tr><tr><td>원거리·일부·보행자</td><td class="n">34.2%</td></tr><tr><td>…</td><td class="n">…</td></tr></table>
+            <div class="row" style="border-top:1px dashed var(--line);padding-top:8px"><span class="muted">이 결과로 바뀐 것</span>추천 프리셋 3개 · ‘이 조건으로 검색’</div>
+          </div>
+          <div class="box" style="padding:14px;position:relative;">
+            <span class="m" style="left:-10px;top:-10px;">3</span>
+            <div class="label" style="margin-top:0">질문 3 자동 기준 vs 사람</div>
+            <b style="font-size:16px">“120건 중 N건 일치…”</b> <span class="badge">표본 64 / 120건 판정, 결과는 잠정</span>
+            <div class="fill" style="height:120px;margin:10px 0;border-radius:4px;display:grid;place-items:center">층별 교차표 (WITH ROLLUP 합계 행 강조)</div>
+            <div class="row" style="border-top:1px dashed var(--line);padding-top:8px"><span class="muted">이 결과로 바뀐 것</span>기준값 조정 여부 · 전후 비교</div>
+          </div>
+          <div class="box" style="padding:14px">
+            <div class="label" style="margin-top:0">질문 4 태그별 비율</div>
+            <b style="font-size:16px">“‘가림 심함’ 장면의 비율이 전체 평균보다 높음”</b>
+            <div class="fill" style="height:120px;margin:10px 0;border-radius:4px;display:grid;place-items:center">태그별 막대 + 전체 평균선</div>
+            <p class="muted" style="margin:0;font-size:11px">* 같은 장면의 객체는 독립이 아니어서 통계적 유의성은 주장하지 않음</p>
+          </div>
+        </div>
+        <div class="wf-footer"><span>데이터 출처 KITTI Vision Benchmark Suite · CC BY-NC-SA 3.0</span><span>용어 정의 · 출처 · 단축키 ?</span></div>
+      </div>
+      <p class="caption">카드 구성: 질문 → 한 줄 답 → 그래프 → 이 결과로 바뀐 것. 숫자는 모두 뷰에서 채움(자리표시).</p>
+    </div>
+    <aside class="notes">
+      <h2>주석</h2>
+      <ol>
+        <li><span class="m inline">1</span><span>막대·셀을 누르면 해당 조건으로 S1이 열린다.</span></li>
+        <li><span class="m inline">2</span><span>‘기준값 다시 계산’(<span class="mono">sp_refresh_threshold</span>): 실행 전 영향 범위 대화상자, 실행 후 이전 → 새 값과 ‘관측 부족만’ 결과 수 변화를 알림으로.</span></li>
+        <li><span class="m inline">3</span><span>표본이 120건 미만이면 잠정 배지.</span></li>
+      </ol>
+      <dl class="states">
+        <dt>로딩</dt><dd>카드별 스켈레톤.</dd>
+        <dt>빈 결과</dt><dd>“아직 판정이 없어 질문 3을 계산할 수 없습니다.”</dd>
+        <dt>오류</dt><dd>카드 단위 오류 블록 — 다른 카드는 그대로(부분 성공).</dd>
+      </dl>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

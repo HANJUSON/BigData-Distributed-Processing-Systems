@@ -1,0 +1,79 @@
+{
+  "recorded_at": "2026-11-05T08:12:26Z",
+  "cpu_model": "AMD Ryzen 7 7840HS with Radeon 780M Graphics",
+  "cpu_physical_cores": 8,
+  "cpu_logical_cores": 16,
+  "ram_total_mib": 30755.8,
+  "ram_total_gib": 30.03,
+  "os": "Ubuntu 26.04.1 LTS (Linux-7.0.0-38-generic-x86_64-with-glibc2.43)",
+  "kernel": "7.0.0-38-generic",
+  "storage": {
+    "data_root": {
+      "path": "~/data/kitti",
+      "realpath": "~/data/kitti",
+      "device": "/dev/nvme0n1p2",
+      "mountpoint": "/",
+      "fstype": "ext4",
+      "free_gib": 223.1,
+      "device_model": "imation M.2 PCIe 512GB SSD Z991",
+      "rotational": "0"
+    },
+    "work_dir": {
+      "path": "~/data/kitti/work/bench",
+      "realpath": "~/data/kitti/work/bench",
+      "device": "/dev/nvme0n1p2",
+      "mountpoint": "/",
+      "fstype": "ext4",
+      "free_gib": 223.1,
+      "device_model": "imation M.2 PCIe 512GB SSD Z991",
+      "rotational": "0"
+    }
+  },
+  "python": "3.12.14",
+  "python_executable": ".venv/bin/python",
+  "versions": {
+    "pyspark": "4.3.0",
+    "pyarrow": "26.0.1",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "psutil": "7.2.2",
+    "matplotlib": "3.11.2"
+  },
+  "java_home": "/usr/lib/jvm/java-17-openjdk-amd64",
+  "java_version": "openjdk version \"17.0.20.1\" 2026-08-18\nOpenJDK Runtime Environment (build 17.0.20.1+1-1-26.04-Ubuntu)\nOpenJDK 64-Bit Server VM (build 17.0.20.1+1-1-26.04-Ubuntu, mixed mode, sharing)",
+  "spark_conf": {
+    "partitions": 32,
+    "spark.sql.shuffle.partitions": 32,
+    "spark.sql.adaptive.enabled": false,
+    "spark.driver.memory": "8g",
+    "spark.local.dir": "~/data/kitti/work/bench/spark-tmp"
+  },
+  "blas_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "data": {
+    "dataset": "KITTI 3D object detection, training split",
+    "download_dates": "unknown (not recorded at download time); file counts and sizes below identify the copy",
+    "training": {
+      "image_2": {
+        "files": 7481,
+        "bytes": 6220741348
+      },
+      "velodyne": {
+        "files": 7481,
+        "bytes": 14270717376
+      },
+      "label_2": {
+        "files": 7481,
+        "bytes": 4239487
+      },
+      "calib": {
+        "files": 7481,
+        "bytes": 12070409
+      }
+    },
+    "zips": []
+  }
+}

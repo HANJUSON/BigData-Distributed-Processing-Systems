@@ -1,0 +1,30 @@
+{
+  "coordinate_system": "Velodyne LiDAR frame: x forward, y left, z up; origin = sensor; unit m",
+  "roi": {
+    "x_min": 0.0,
+    "x_max_exclusive": 80.0,
+    "y_min": -40.0,
+    "y_max_exclusive": 40.0
+  },
+  "cell_size_m": 1.0,
+  "grid_shape": [
+    80,
+    80
+  ],
+  "grid_x": "FLOOR((CAST(x AS DOUBLE) - 0.0) / 1.0)",
+  "grid_y": "FLOOR((CAST(y AS DOUBLE) - (-40.0)) / 1.0)",
+  "filter": "NaN/Inf (x, y, z) and ROI filter applied before FLOOR",
+  "mean_definition": "per-cell sum of n_points over frames / n_frames_processed; empty cell = 0",
+  "n_frames_processed": 100,
+  "processed_frame_rule": "frames.n_points IS NOT NULL",
+  "sample_frames": [
+    56,
+    178,
+    192
+  ],
+  "note": "Cumulative heatmap is a distribution relative to the sensor, not a geographic map.",
+  "frame_set": {
+    "n": 100,
+    "sha256": "283d3a49d8c24310e0d2eb9bfe1fb1a2ddf55d0d75e09396b725e46cc2737158"
+  }
+}

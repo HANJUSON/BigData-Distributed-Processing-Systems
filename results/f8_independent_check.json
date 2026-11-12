@@ -1,0 +1,714 @@
+{
+  "generated_at": "2026-11-05T08:58:43Z",
+  "check": "F-8 points_in_box independent recount",
+  "method": "KITTI devkit compute_box_3d corners + 6 face half-space test (outward unit normals, eps=1e-06); kitti.geometry.points_in_box_mask is not used",
+  "compared_against": "~/data/kitti/work/parquet/object_features",
+  "frames_file": "samples/sample_100.txt",
+  "n_frames": 100,
+  "n_objects": 700,
+  "n_valid_3d_compared": 567,
+  "n_mismatches": 0,
+  "pass": true,
+  "frames": [
+    {
+      "frame_id": 56,
+      "n_objects": 2,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 178,
+      "n_objects": 9,
+      "n_valid_3d": 8,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 192,
+      "n_objects": 9,
+      "n_valid_3d": 9,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 289,
+      "n_objects": 3,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 317,
+      "n_objects": 14,
+      "n_valid_3d": 10,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 337,
+      "n_objects": 1,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 372,
+      "n_objects": 7,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 384,
+      "n_objects": 17,
+      "n_valid_3d": 16,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 428,
+      "n_objects": 6,
+      "n_valid_3d": 4,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 519,
+      "n_objects": 15,
+      "n_valid_3d": 12,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 535,
+      "n_objects": 18,
+      "n_valid_3d": 17,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 582,
+      "n_objects": 5,
+      "n_valid_3d": 5,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 676,
+      "n_objects": 5,
+      "n_valid_3d": 4,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 779,
+      "n_objects": 1,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 783,
+      "n_objects": 3,
+      "n_valid_3d": 2,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 806,
+      "n_objects": 3,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 819,
+      "n_objects": 9,
+      "n_valid_3d": 8,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 903,
+      "n_objects": 6,
+      "n_valid_3d": 6,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1032,
+      "n_objects": 7,
+      "n_valid_3d": 5,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1062,
+      "n_objects": 14,
+      "n_valid_3d": 11,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1066,
+      "n_objects": 1,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1069,
+      "n_objects": 11,
+      "n_valid_3d": 8,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1209,
+      "n_objects": 15,
+      "n_valid_3d": 14,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1271,
+      "n_objects": 3,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1309,
+      "n_objects": 6,
+      "n_valid_3d": 5,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1466,
+      "n_objects": 9,
+      "n_valid_3d": 5,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1483,
+      "n_objects": 9,
+      "n_valid_3d": 7,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1490,
+      "n_objects": 7,
+      "n_valid_3d": 6,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1554,
+      "n_objects": 2,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1792,
+      "n_objects": 5,
+      "n_valid_3d": 5,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1818,
+      "n_objects": 8,
+      "n_valid_3d": 7,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1857,
+      "n_objects": 6,
+      "n_valid_3d": 5,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1943,
+      "n_objects": 4,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 1989,
+      "n_objects": 5,
+      "n_valid_3d": 5,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2002,
+      "n_objects": 8,
+      "n_valid_3d": 6,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2017,
+      "n_objects": 5,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2126,
+      "n_objects": 15,
+      "n_valid_3d": 14,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2265,
+      "n_objects": 4,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2292,
+      "n_objects": 9,
+      "n_valid_3d": 4,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2354,
+      "n_objects": 5,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2431,
+      "n_objects": 2,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2740,
+      "n_objects": 4,
+      "n_valid_3d": 2,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2931,
+      "n_objects": 2,
+      "n_valid_3d": 2,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2940,
+      "n_objects": 10,
+      "n_valid_3d": 7,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2947,
+      "n_objects": 13,
+      "n_valid_3d": 13,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 2998,
+      "n_objects": 5,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3077,
+      "n_objects": 3,
+      "n_valid_3d": 2,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3084,
+      "n_objects": 10,
+      "n_valid_3d": 7,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3140,
+      "n_objects": 5,
+      "n_valid_3d": 2,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3317,
+      "n_objects": 12,
+      "n_valid_3d": 10,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3353,
+      "n_objects": 12,
+      "n_valid_3d": 9,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3418,
+      "n_objects": 6,
+      "n_valid_3d": 4,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3421,
+      "n_objects": 1,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3615,
+      "n_objects": 4,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3653,
+      "n_objects": 13,
+      "n_valid_3d": 13,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3705,
+      "n_objects": 5,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3759,
+      "n_objects": 9,
+      "n_valid_3d": 7,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3768,
+      "n_objects": 1,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3795,
+      "n_objects": 2,
+      "n_valid_3d": 2,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3825,
+      "n_objects": 3,
+      "n_valid_3d": 2,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3841,
+      "n_objects": 4,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3892,
+      "n_objects": 4,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 3904,
+      "n_objects": 10,
+      "n_valid_3d": 9,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 4012,
+      "n_objects": 1,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 4082,
+      "n_objects": 10,
+      "n_valid_3d": 10,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 4419,
+      "n_objects": 7,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 4457,
+      "n_objects": 3,
+      "n_valid_3d": 2,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 4499,
+      "n_objects": 11,
+      "n_valid_3d": 10,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 4514,
+      "n_objects": 1,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 4518,
+      "n_objects": 9,
+      "n_valid_3d": 9,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 4596,
+      "n_objects": 6,
+      "n_valid_3d": 4,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 4609,
+      "n_objects": 8,
+      "n_valid_3d": 6,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 4653,
+      "n_objects": 11,
+      "n_valid_3d": 11,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5047,
+      "n_objects": 1,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5058,
+      "n_objects": 11,
+      "n_valid_3d": 11,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5090,
+      "n_objects": 9,
+      "n_valid_3d": 7,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5220,
+      "n_objects": 14,
+      "n_valid_3d": 11,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5229,
+      "n_objects": 11,
+      "n_valid_3d": 10,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5313,
+      "n_objects": 7,
+      "n_valid_3d": 4,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5340,
+      "n_objects": 9,
+      "n_valid_3d": 5,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5350,
+      "n_objects": 7,
+      "n_valid_3d": 7,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5470,
+      "n_objects": 3,
+      "n_valid_3d": 2,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5519,
+      "n_objects": 5,
+      "n_valid_3d": 5,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5565,
+      "n_objects": 4,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5739,
+      "n_objects": 6,
+      "n_valid_3d": 5,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5745,
+      "n_objects": 2,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5784,
+      "n_objects": 6,
+      "n_valid_3d": 6,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 5866,
+      "n_objects": 18,
+      "n_valid_3d": 16,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 6051,
+      "n_objects": 7,
+      "n_valid_3d": 6,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 6093,
+      "n_objects": 5,
+      "n_valid_3d": 4,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 6180,
+      "n_objects": 16,
+      "n_valid_3d": 15,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 6499,
+      "n_objects": 2,
+      "n_valid_3d": 2,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 6526,
+      "n_objects": 8,
+      "n_valid_3d": 6,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 6542,
+      "n_objects": 7,
+      "n_valid_3d": 5,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 6549,
+      "n_objects": 16,
+      "n_valid_3d": 14,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 6584,
+      "n_objects": 1,
+      "n_valid_3d": 1,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 6645,
+      "n_objects": 6,
+      "n_valid_3d": 3,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 7103,
+      "n_objects": 5,
+      "n_valid_3d": 4,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 7158,
+      "n_objects": 2,
+      "n_valid_3d": 2,
+      "pass": true,
+      "mismatches": []
+    },
+    {
+      "frame_id": 7421,
+      "n_objects": 14,
+      "n_valid_3d": 12,
+      "pass": true,
+      "mismatches": []
+    }
+  ]
+}

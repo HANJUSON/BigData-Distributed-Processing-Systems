@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S1 장면 검색 · 와이어프레임</title>
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <h1>S1 장면 검색 <span class="mono muted">/</span></h1>
+    <span class="meta">질문: “조건에 맞는 장면은 무엇인가?” · 소속 공동(F-10, DB FR-1·FR-6) · 데이터 MySQL <code>sp_search_scenes</code> · <a href="README.md">목록</a> · 기준 README 9.4</span>
+  </header>
+
+  <div class="layout">
+    <div>
+      <div class="frame">
+        <div class="wf-header">
+          <span class="wf-brand">KITTI Scene Explorer</span>
+          <nav class="wf-nav"><span class="on">장면 검색</span><span>검수</span><span>분석</span><span>처리 결과</span><span>정보</span></nav>
+          <div class="wf-tools"><span class="btn off">검수자 ▾</span><span class="btn ghost">⌨</span><span class="btn ghost">◐</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:280px 1fr;min-height:760px;">
+          <aside style="border-right:1px solid var(--line);background:var(--fill);padding:16px;position:relative;">
+            <span class="m" style="left:250px;top:8px;">1</span>
+            <strong>검색 조건</strong>
+            <div class="label">프리셋</div><div class="input">추천 프리셋 선택 ▾</div>
+            <div class="label">객체 종류</div>
+            <div class="row" style="gap:4px 14px;"><span>☐ ● 차량</span><span>☐ ● 승합차</span><span>☐ ● 트럭</span><span>☑ ● 보행자</span><span>☐ ● 앉은 사람</span><span>☐ ● 자전거</span><span>☐ ● 트램</span><span>☐ ● 기타</span></div>
+            <div class="label">거리 (m) <span class="m inline" style="display:inline-grid">2</span></div>
+            <div class="slider"><i></i></div>
+            <div class="row"><span class="input mono">30</span>–<span class="input mono">80</span> m</div>
+            <div class="label">가림</div>
+            <div class="row"><span class="btn">0 보임</span><span class="btn primary">✓ 1 일부</span><span class="btn">2 대부분</span></div>
+            <div class="row" style="margin-top:6px">☐ 알 수 없음(3) 포함</div>
+            <div class="label">포인트 수</div>
+            <div class="row"><span class="input">최소</span>–<span class="input">최대</span></div>
+            <div class="label">&nbsp;</div>
+            <div class="col"><span>◯━ 관측 부족만 ⓘ</span><span>◯━ 미검수만</span></div>
+            <div class="label">태그</div><div class="input">전체 태그 ▾</div>
+            <div style="margin-top:20px"><span class="btn off" style="width:100%;justify-content:center;">프리셋으로 저장</span></div>
+          </aside>
+          <section style="padding:16px;position:relative;">
+            <div class="row" style="justify-content:space-between;">
+              <div class="row"><span class="m inline">3</span><strong style="font-size:18px">장면 1,284개</strong><span class="muted">· 객체 2,031개 일치</span></div>
+              <div class="row">정렬 <span class="btn">일치 객체 많은 순 ▾</span><span class="m inline">4</span></div>
+            </div>
+            <div class="row" style="margin:12px 0;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:12px;">
+              <div class="row"><span class="m inline">5</span><span class="chip">● 보행자</span><span class="chip">30–80 m</span><span class="chip">일부 가림</span></div>
+              <u class="muted">조건 모두 지우기</u>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;position:relative;">
+              <span class="m" style="left:-10px;top:-10px;">6</span>
+              <!-- 8 cards -->
+              <div class="box" style="padding:0"><div class="dark" style="aspect-ratio:1242/375;display:grid;place-items:center;font-size:11px;">썸네일 WebP · 박스 겹침</div><div style="padding:8px"><div class="mono"><b>000123</b></div><div class="muted">● 보행자 2 · <span class="mono">30.9 m</span></div><div class="row" style="margin-top:4px"><span class="badge">⚠ 관측 부족 1</span><span class="badge">○ 미검수</span></div></div></div>
+              <div class="box" style="padding:0"><div class="dark" style="aspect-ratio:1242/375;"></div><div style="padding:8px"><div class="mono"><b>001045</b></div><div class="muted">● 보행자 1 · <span class="mono">41.0 m</span></div><div class="row" style="margin-top:4px"><span class="badge">✓ 검수 완료</span></div></div></div>
+              <div class="box" style="padding:0"><div class="dark" style="aspect-ratio:1242/375;"></div><div style="padding:8px"><div class="line" style="width:40%"></div><div class="line" style="width:70%;margin-top:6px"></div></div></div>
+              <div class="box" style="padding:0"><div class="dark" style="aspect-ratio:1242/375;"></div><div style="padding:8px"><div class="line" style="width:40%"></div><div class="line" style="width:70%;margin-top:6px"></div></div></div>
+              <div class="box" style="padding:0"><div class="dark" style="aspect-ratio:1242/375;"></div><div style="padding:8px"><div class="line" style="width:40%"></div><div class="line" style="width:70%;margin-top:6px"></div></div></div>
+              <div class="box" style="padding:0"><div class="dark" style="aspect-ratio:1242/375;"></div><div style="padding:8px"><div class="line" style="width:40%"></div><div class="line" style="width:70%;margin-top:6px"></div></div></div>
+              <div class="box" style="padding:0"><div class="dark" style="aspect-ratio:1242/375;"></div><div style="padding:8px"><div class="line" style="width:40%"></div><div class="line" style="width:70%;margin-top:6px"></div></div></div>
+              <div class="box" style="padding:0"><div class="dark" style="aspect-ratio:1242/375;"></div><div style="padding:8px"><div class="line" style="width:40%"></div><div class="line" style="width:70%;margin-top:6px"></div></div></div>
+            </div>
+            <div class="row" style="justify-content:center;margin-top:24px;"><span class="m inline">7</span>‹ 이전 &nbsp; <b>1</b> 2 3 … 54 &nbsp; 다음 ›</div>
+          </section>
+        </div>
+        <div class="wf-footer"><span>데이터 출처 KITTI Vision Benchmark Suite · CC BY-NC-SA 3.0</span><span>용어 정의 · 출처 · 단축키 ?</span></div>
+      </div>
+      <p class="caption">1440 × 900 기준. 본문 최대 폭 1440 px, 조건 패널 280 px 고정(자체 스크롤).</p>
+
+      <h2 class="sec-title">≤ 1024 px · 390 px 변형</h2>
+      <div class="row" style="align-items:flex-start;gap:24px;">
+        <div class="frame frame--mobile">
+          <div class="wf-header"><span class="wf-brand">KITTI Scene Explorer</span><div class="wf-tools"><span>⌨</span><span>◐</span><span>☰</span></div></div>
+          <div style="padding:12px;">
+            <div class="row"><span class="btn">☰ 검색 조건 · 3</span><b>장면 1,284개</b><span class="muted">· 객체 2,031개</span></div>
+            <div class="row" style="margin:8px 0"><span class="chip">● 보행자</span><span class="chip">30–80 m</span></div>
+            <div class="box" style="padding:0"><div class="dark" style="aspect-ratio:1242/375;"></div><div style="padding:8px"><b class="mono">000123</b><div class="muted">● 보행자 2 · 30.9 m</div></div></div>
+            <div class="box" style="padding:0;margin-top:8px"><div class="dark" style="aspect-ratio:1242/375;"></div><div style="padding:8px"><div class="line" style="width:40%"></div></div></div>
+          </div>
+        </div>
+        <div class="frame frame--mobile" style="position:relative;">
+          <div class="wf-header"><span class="wf-brand">KITTI Scene Explorer</span></div>
+          <div style="display:grid;grid-template-columns:300px 1fr;height:360px;">
+            <div style="background:var(--fill);padding:12px;border-right:1.5px solid var(--ink);"><div class="row" style="justify-content:space-between"><b>검색 조건</b><span>×</span></div><div class="label">객체 종류</div><div class="line"></div><div class="label">거리 (m)</div><div class="slider"><i></i></div><div class="label">가림</div><div class="line" style="width:70%"></div></div>
+            <div style="background:rgba(0,0,0,.35)"></div>
+          </div>
+          <p class="caption" style="margin:8px">서랍: <kbd>/</kbd> 또는 버튼으로 열고 <kbd>Esc</kbd>·배경으로 닫음</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h2>주석</h2>
+      <ol>
+        <li><span class="m inline">1</span><span>조건 패널(왼쪽 고정, 280 px). 조건을 바꾸면 <b>300 ms 디바운스 후 자동 검색</b>. ‘검색’ 버튼 없음. 결과 영역만 다시 그리고 패널의 스크롤·포커스 유지. <kbd>/</kbd>로 첫 입력에 포커스.</span></li>
+        <li><span class="m inline">2</span><span>거리: 이중 슬라이더 + 숫자 입력, 0–80 m, 5 m 단위. 최솟값 &gt; 최댓값이면 입력 칸 바로 아래 “최솟값이 최댓값보다 큽니다”, 검색 보류.</span></li>
+        <li><span class="m inline">3</span><span>결과 수 ‘장면 N개 · 객체 M개’ — 검색 의미가 “한 객체가 모든 조건을 만족”이므로 둘 다 표시(aria-live).</span></li>
+        <li><span class="m inline">4</span><span>정렬: 일치 객체 많은 순(기본) · 거리 먼 순 · 포인트 적은 순 · 장면 번호 순.</span></li>
+        <li><span class="m inline">5</span><span>적용 조건 칩, × 로 하나씩 해제. 조건 없으면 ‘전체 장면 · 조건 없음’.</span></li>
+        <li><span class="m inline">6</span><span>결과 카드: 썸네일(박스를 미리 그린 WebP, 폭 320 px, lazy) · <span class="mono">frame_id</span> · 일치 객체 수 · 최근접 거리 · 관측 부족/검수 배지. 24개/페이지, 1–4열.</span></li>
+        <li><span class="m inline">7</span><span>모든 조건·정렬·페이지를 URL에: <span class="mono">/?cls=Pedestrian&amp;dmin=30&amp;dmax=80&amp;occ=1&amp;page=2</span></span></li>
+      </ol>
+      <dl class="states">
+        <dt>초기</dt><dd>전체 장면, 일치 객체 많은 순으로 바로 결과 표시.</dd>
+        <dt>로딩</dt><dd>카드 모양 스켈레톤, 300 ms 이내면 표시 안 함.</dd>
+        <dt>빈 결과</dt><dd>“조건에 맞는 장면이 없습니다. 거리 조건을 해제하면 312개가 있습니다.” + 추천 프리셋. 완화 수는 MySQL 프로시저가 계산.</dd>
+        <dt>오류</dt><dd>“데이터베이스에 연결하지 못했습니다…” + 자세히 + 다시 시도.</dd>
+        <dt>부분 성공</dt><dd>썸네일 누락 카드만 자리표시로.</dd>
+      </dl>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

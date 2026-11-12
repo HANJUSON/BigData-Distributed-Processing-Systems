@@ -1,0 +1,772 @@
+{
+  "generated_at": "2026-11-05T04:31:11Z",
+  "spark_work": "~/data/kitti/work",
+  "spark_results": "results",
+  "seq": "~/data/kitti/work/seq/full",
+  "frames": 7481,
+  "frame_set": {
+    "spark": {
+      "n": 7481,
+      "sha256": "ed822896af3e966c5181d25178c5e93e13221e04dd681443a2ac415da4ab494e"
+    },
+    "seq": {
+      "n": 7481,
+      "sha256": "ed822896af3e966c5181d25178c5e93e13221e04dd681443a2ac415da4ab494e"
+    }
+  },
+  "tolerance": {
+    "abs": 1e-06,
+    "rel": 1e-06,
+    "rule": "abs(a-b) <= abs + rel*abs(b), a=Spark, b=sequential"
+  },
+  "items": [
+    {
+      "name": "frame_set",
+      "title": "대조 장면 집합 동일 (n, sha256)",
+      "spark": {
+        "n": 7481,
+        "sha256": "ed822896af3e966c5181d25178c5e93e13221e04dd681443a2ac415da4ab494e"
+      },
+      "seq": {
+        "n": 7481,
+        "sha256": "ed822896af3e966c5181d25178c5e93e13221e04dd681443a2ac415da4ab494e"
+      },
+      "frames_file": {
+        "n": 7481,
+        "sha256": "ed822896af3e966c5181d25178c5e93e13221e04dd681443a2ac415da4ab494e"
+      },
+      "pass": true
+    },
+    {
+      "name": "object_features",
+      "title": "객체 특징 표 (F-7·F-8)",
+      "spark_source": "~/data/kitti/work/parquet/object_features",
+      "seq_source": "~/data/kitti/work/seq/full/object_features",
+      "keys": [
+        "frame_id",
+        "object_id"
+      ],
+      "rows_spark": 51865,
+      "rows_seq": 51865,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 51865,
+      "columns": {
+        "class": {
+          "kind": "str",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "truncated": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "occluded": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "alpha": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "bbox_left": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "bbox_top": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "bbox_right": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "bbox_bottom": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "h": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "w": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "l": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "x": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "y": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "z": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "ry": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "is_dontcare": {
+          "kind": "bool",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "valid_3d": {
+          "kind": "bool",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "dist_m": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "bbox_height": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "eligible_easy": {
+          "kind": "bool",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "eligible_moderate": {
+          "kind": "bool",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "eligible_hard": {
+          "kind": "bool",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "diff_level": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "points_in_box": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "dist_bin": {
+          "kind": "str",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    },
+    {
+      "name": "grid_stats",
+      "title": "장면별 격자 통계 (F-6)",
+      "spark_source": "~/data/kitti/work/parquet/grid_stats",
+      "seq_source": "~/data/kitti/work/seq/full/grid_stats",
+      "keys": [
+        "frame_id",
+        "grid_x",
+        "grid_y"
+      ],
+      "rows_spark": 9746109,
+      "rows_seq": 9746109,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 9746109,
+      "columns": {
+        "n_points": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "z_sum": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "z_min": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "z_max": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    },
+    {
+      "name": "f5_per_class",
+      "title": "클래스별 요약 (F-5)",
+      "spark_source": "results/f5_dataframe_vs_sql.json",
+      "seq_source": "~/data/kitti/work/seq/full/f5_per_class.json",
+      "keys": [
+        "class"
+      ],
+      "rows_spark": 9,
+      "rows_seq": 9,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 9,
+      "columns": {
+        "n_objects": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "n_valid_3d": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "mean_dist_m": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "n_scenes": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "sum_points_in_box": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    },
+    {
+      "name": "grid_cumulative",
+      "title": "전체 누적 격자 (F-6)",
+      "spark_source": "results/grid_cumulative.csv",
+      "seq_source": "~/data/kitti/work/seq/full/grid_cumulative.csv",
+      "keys": [
+        "grid_x",
+        "grid_y"
+      ],
+      "rows_spark": 6400,
+      "rows_seq": 6400,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 6400,
+      "columns": {
+        "x_min_m": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "y_min_m": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "n_points_sum": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "n_points_mean": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    },
+    {
+      "name": "grid_params",
+      "title": "정상 처리 프레임 수 (F-6 평균 분모)",
+      "spark_source": "results/grid_params.json",
+      "seq_source": "~/data/kitti/work/seq/full/grid_params.json",
+      "keys": [
+        "param"
+      ],
+      "rows_spark": 1,
+      "rows_seq": 1,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 1,
+      "columns": {
+        "value": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    },
+    {
+      "name": "f7_class_dist",
+      "title": "클래스 × 거리 구간 (F-7)",
+      "spark_source": "results/f7_class_dist.csv",
+      "seq_source": "~/data/kitti/work/seq/full/f7_class_dist.csv",
+      "keys": [
+        "class",
+        "dist_bin"
+      ],
+      "rows_spark": 31,
+      "rows_seq": 31,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 31,
+      "columns": {
+        "n_objects": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "n_valid_3d": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "sum_points_in_box": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    },
+    {
+      "name": "f7_class_occluded",
+      "title": "클래스 × 가림 (F-7)",
+      "spark_source": "results/f7_class_occluded.csv",
+      "seq_source": "~/data/kitti/work/seq/full/f7_class_occluded.csv",
+      "keys": [
+        "class",
+        "occluded"
+      ],
+      "rows_spark": 32,
+      "rows_seq": 32,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 32,
+      "columns": {
+        "n_objects": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "n_valid_3d": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "sum_points_in_box": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    },
+    {
+      "name": "f7_class_truncated",
+      "title": "클래스 × 잘림 구간 (F-7)",
+      "spark_source": "results/f7_class_truncated.csv",
+      "seq_source": "~/data/kitti/work/seq/full/f7_class_truncated.csv",
+      "keys": [
+        "class",
+        "trunc_bucket"
+      ],
+      "rows_spark": 40,
+      "rows_seq": 40,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 40,
+      "columns": {
+        "n_objects": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "n_valid_3d": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "sum_points_in_box": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    },
+    {
+      "name": "f7_class_difficulty",
+      "title": "클래스별 난이도 적격 (F-7)",
+      "spark_source": "results/f7_class_difficulty.csv",
+      "seq_source": "~/data/kitti/work/seq/full/f7_class_difficulty.csv",
+      "keys": [
+        "class"
+      ],
+      "rows_spark": 8,
+      "rows_seq": 8,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 8,
+      "columns": {
+        "n_objects": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "n_eligible_easy": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "n_eligible_moderate": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "n_eligible_hard": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "n_not_eligible": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    },
+    {
+      "name": "f9_thresholds",
+      "title": "클래스별 관측 부족 기준값 (F-9)",
+      "spark_source": "results/f9_thresholds.csv",
+      "seq_source": "~/data/kitti/work/seq/full/f9_thresholds.csv",
+      "keys": [
+        "class"
+      ],
+      "rows_spark": 8,
+      "rows_seq": 8,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 8,
+      "columns": {
+        "n": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "k": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "threshold": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    },
+    {
+      "name": "f9_low_objects",
+      "title": "관측 부족 객체 목록 (F-9)",
+      "spark_source": "results/f9_low_objects.csv",
+      "seq_source": "~/data/kitti/work/seq/full/f9_low_objects.csv",
+      "keys": [
+        "frame_id",
+        "object_id"
+      ],
+      "rows_spark": 4298,
+      "rows_seq": 4298,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 4298,
+      "columns": {
+        "class": {
+          "kind": "str",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "points_in_box": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "threshold": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "dist_m": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "dist_bin": {
+          "kind": "str",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "occluded": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "truncated": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "diff_level": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "h": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "w": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        },
+        "l": {
+          "kind": "float",
+          "null_mismatch": 0,
+          "max_abs_diff": 0.0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    },
+    {
+      "name": "f9_low_scenes",
+      "title": "관측 부족 장면 목록 (F-9)",
+      "spark_source": "results/f9_low_scenes.csv",
+      "seq_source": "~/data/kitti/work/seq/full/f9_low_scenes.csv",
+      "keys": [
+        "frame_id"
+      ],
+      "rows_spark": 2729,
+      "rows_seq": 2729,
+      "duplicate_keys_spark": 0,
+      "duplicate_keys_seq": 0,
+      "duplicate_examples": {
+        "spark": [],
+        "seq": []
+      },
+      "keys_only_in_spark": 0,
+      "keys_only_in_seq": 0,
+      "missing_key_examples": {
+        "only_in_spark": [],
+        "only_in_seq": []
+      },
+      "rows_compared": 2729,
+      "columns": {
+        "n_low_objects": {
+          "kind": "int",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        },
+        "classes": {
+          "kind": "str",
+          "null_mismatch": 0,
+          "value_mismatch": 0
+        }
+      },
+      "null_mismatch": 0,
+      "value_mismatch": 0,
+      "pass": true
+    }
+  ],
+  "n_items": 13,
+  "failed_items": [],
+  "pass": true
+}

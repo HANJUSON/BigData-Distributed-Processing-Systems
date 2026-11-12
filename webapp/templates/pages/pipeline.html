@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/tabs.html" import tablist, tabpanel %}
+{% from "macros/badges.html" import pass_fail, cls_tag, badge %}
+{% from "macros/feedback.html" import empty_state, notice %}
+
+{#- S5 처리 결과 — 배치가 저장한 결과 파일만 읽는다(README 9.3·9.4). 숫자는 webapp.results가 파일에서 옮긴 값. -#}
+
+{% block title %}처리 결과{% endblock %}
+
+{%- macro conclusion(text, source, generated=None) -%}
+<div class="conclusion">
+  <span class="conclusion__label">한 줄 결론</span>
+  <div>
+    <p class="conclusion__text">{{ text }}</p>
+    <p class="conclusion__src">출처: <code>{{ source }}</code>{% if generated %} · 생성 {{ generated }}{% endif %}</p>
+  </div>
+</div>
+{%- endmacro -%}
+
+{%- macro figure(id, title, source, chart=True) -%}
+<figure class="figure-card" data-figure id="{{ id }}" style="margin: 0;">
+  <div class="figure-card__head">
+    <figcaption class="figure-card__title">{{ title }}</figcaption>
+    {%- if chart %}
+    <button type="button" class="btn btn--ghost btn--sm" data-view-toggle aria-pressed="false" aria-controls="{{ id }}-table"
+            data-label-table="{{ ko.UI.view_as_table }}" data-label-chart="{{ ko.UI.view_as_chart }}">{{ icon("layers", 14) }}<span>{{ ko.UI.view_as_table }}</span></button>
+    {%- endif %}
+  </div>
+  <div class="figure-card__body">{{ caller() }}</div>
+  <p class="figure-card__src">출처: <code>{{ source }}</code></p>
+</figure>
+{%- endmacro -%}
+
+{#- 배치가 만든 PNG 그림 하나 -#}
+{%- macro png(fig, idx) -%}
+{% call figure("fig-png-" ~ idx, fig.title, fig.path, chart=False) %}
+  <a href="{{ url_for('pages.result_file', rel=fig.path) }}"><img class="figure-card__img" src="{{ url_for('pages.result_file', rel=fig.path) }}" alt="{{ fig.alt }}" loading="lazy" decoding="async"></a>
+{% endcall %}
+{%- endmacro -%}
+
+{%- macro missing(filename) -%}
+{{ empty_state(ko.STATE_MESSAGES.results_missing, ko.STATE_MESSAGES.results_missing_body.format(filename=filename), compact=True) }}
+{%- endmacro -%}
+
+{#- 원본 파일 내려받기: 있는 파일만 링크 -#}
+{%- macro downloads(files) -%}
+<div class="downloads">
+  <h2>원본 파일</h2>
+  <ul role="list">
+    {%- for f in files if has_file(f) %}
+    <li><a class="btn btn--secondary btn--sm" href="{{ url_for('pages.result_file', rel=f) }}" download>{{ icon("download", 14) }}<span>{{ f }}</span></a></li>
+    {%- endfor %}
+  </ul>
+</div>
+{%- endmacro -%}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="page-head__eyebrow">S5 · 빅데이터 과목</p>
+    <h1>처리 결과</h1>
+    <p class="page-head__q">데이터와 처리는 믿을 만한가?</p>
+  </div>
+</div>
+
+<div class="stack">
+  {{ tablist("s5", [("quality", "데이터 품질"), ("dist", "분포"), ("heat", "공간 히트맵"), ("lowobs", "관측 부족"), ("perf", "정확성·성능")], active="quality", label="처리 결과", hash=True) }}
+</div>
+
+{# --------------------------------------------------------- 데이터 품질 #}
+{% call tabpanel("s5", "quality", active="quality") %}
+  {%- set q = p.quality %}
+  {%- if q %}
+  {{ conclusion(q.conclusion, q.source, q.generated_at) }}
+  <div class="evidence">
+    {% call figure("fig-quality", "검사 항목별 건수 (무시 영역과 일반 오류 분리)", q.source, chart=False) %}
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th scope="col">검사 항목</th><th scope="col" class="is-num">건수</th><th scope="col">결과</th></tr></thead>
+        <tbody>
+          {%- for c in q.checks %}
+          <tr><td>{{ c.item }}</td><td class="is-num">{{ c.count|int }}{% if c.total %} / {{ c.total|int }}{% endif %}</td><td>{{ pass_fail(c.ok) }}</td></tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endcall %}
+    {% call figure("fig-volume", "처리 용량과 총 포인트 수 (D-3)", q.source, chart=False) %}
+    <dl class="kv">
+      {%- for v in q.volume %}<dt>{{ v.item }}</dt><dd class="num">{{ v.value }}</dd>{% endfor %}
+    </dl>
+    <p class="muted small" style="margin-top: var(--space-4);">실제로 읽어 처리한 파일 크기의 합입니다. 공식 배포 용량(학습·시험 포함)과 다를 수 있습니다.</p>
+    {% endcall %}
+  </div>
+  {{ downloads(["quality_report.json", "quality_report.md"]) }}
+  {%- else %}
+  {{ missing("quality_report.json") }}
+  {%- endif %}
+{% endcall %}
+
+{# --------------------------------------------------------- 분포 #}
+{% call tabpanel("s5", "dist", active="quality") %}
+  {%- set d = p.distribution %}
+  {%- if d %}
+  {{ conclusion(d.conclusion, d.source ~ " · analysis_summary.json", p.generated_at) }}
+  <div class="evidence">
+    {% call figure("fig-dist", "클래스 × 거리 구간별 객체 수 (F-7, 무시 영역 제외)", d.source) %}
+    <div data-view="chart" class="chart-box"><canvas id="chart-dist" role="img" aria-label="클래스와 거리 구간별 객체 수 막대 그래프"></canvas></div>
+    <div data-view="table" hidden id="fig-dist-table" class="table-wrap">
+      <table class="data-table data-table--compact">
+        <thead><tr><th scope="col">클래스</th>{% for bin in d.bins %}<th scope="col" class="is-num">{{ bin }}</th>{% endfor %}<th scope="col" class="is-num">20 m 이내</th></tr></thead>
+        <tbody>
+          {%- for cls, vals in d.series.items() %}
+          <tr><th scope="row">{{ cls_tag(cls) }}</th>{% for v in vals %}<td class="is-num">{{ v|int }}</td>{% endfor %}<td class="is-num">{% if d.share_within_20m[cls] is not none %}{{ "%.1f"|format(d.share_within_20m[cls]) }}%{% else %}—{% endif %}</td></tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endcall %}
+    {% call figure("fig-occ", "클래스 × 가림 정도 · 난이도 적격 객체 수", "f7_class_occluded.csv · f7_class_difficulty.csv", chart=False) %}
+    <div class="table-wrap">
+      <table class="data-table data-table--compact">
+        <caption class="visually-hidden">클래스별 가림 정도 객체 수</caption>
+        <thead><tr><th scope="col">클래스</th>{% for k in range(4) %}<th scope="col" class="is-num">{{ k|occ_label(true) }}</th>{% endfor %}</tr></thead>
+        <tbody>
+          {%- for r in d.occluded %}<tr><th scope="row">{{ cls_tag(r.cls) }}</th>{% for v in r.counts %}<td class="is-num">{{ v|int }}</td>{% endfor %}</tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {%- if d.difficulty %}
+    <div class="table-wrap" style="margin-top: var(--space-4);">
+      <table class="data-table data-table--compact">
+        <caption class="visually-hidden">클래스별 KITTI 난이도 적격 객체 수 (누적 기준)</caption>
+        <thead><tr><th scope="col">클래스</th><th scope="col" class="is-num">객체</th><th scope="col" class="is-num">{{ 1|diff_label }}</th><th scope="col" class="is-num">{{ 2|diff_label }}</th><th scope="col" class="is-num">{{ 3|diff_label }}</th><th scope="col" class="is-num">{{ none|diff_label }}</th></tr></thead>
+        <tbody>
+          {%- for r in d.difficulty %}<tr><th scope="row">{{ cls_tag(r.cls) }}</th><td class="is-num">{{ r.n|int }}</td><td class="is-num">{{ r.easy|int }}</td><td class="is-num">{{ r.moderate|int }}</td><td class="is-num">{{ r.hard|int }}</td><td class="is-num">{{ r.none|int }}</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small" style="margin-top: var(--space-2);">난이도 적격은 누적입니다: ‘보통’ 적격에는 ‘쉬움’ 적격이 포함됩니다.</p>
+    {%- endif %}
+    {% endcall %}
+    {%- for fig in d.figures %}{{ png(fig, "dist-" ~ loop.index) }}{% endfor %}
+  </div>
+  {{ downloads(["f7_class_dist.csv", "f7_class_occluded.csv", "f7_class_difficulty.csv", "f7_class_truncated.csv"]) }}
+  {%- else %}
+  {{ missing("f7_class_dist.csv") }}
+  {%- endif %}
+{% endcall %}
+
+{# --------------------------------------------------------- 공간 히트맵 #}
+{% call tabpanel("s5", "heat", active="quality") %}
+  {%- set h = p.heatmap %}
+  {{ conclusion(h.conclusion, h.source, p.generated_at) }}
+  <div class="evidence">
+    {%- for fig in h.figures %}{{ png(fig, "heat-" ~ loop.index) }}{% else %}{{ missing("figures/f6_grid_cumulative.png") }}{% endfor %}
+    {%- if h.params %}
+    {% call figure("fig-grid", "격자 설정 (F-6, 모든 장면에서 같게 고정)", "grid_params.json", chart=False) %}
+    <dl class="kv">
+      {%- for k, v in h.params %}<dt>{{ k }}</dt><dd>{{ v }}</dd>{% endfor %}
+      {%- if h.total_points is not none %}<dt>관심 영역 안 포인트 합계</dt><dd class="num">{{ h.total_points|int }}개</dd>{% endif %}
+      {%- if h.grid_rows is not none %}<dt>장면별 격자 통계 행 수</dt><dd class="num">{{ h.grid_rows|int }}행</dd>{% endif %}
+    </dl>
+    <p class="muted small" style="margin-top: var(--space-4);">누적 히트맵은 센서 기준 상대 위치의 분포이며 지리 좌표 지도가 아닙니다.</p>
+    {% endcall %}
+    {%- endif %}
+  </div>
+  {{ downloads(["grid_params.json", "grid_cumulative.csv"]) }}
+{% endcall %}
+
+{# --------------------------------------------------------- 관측 부족 #}
+{% call tabpanel("s5", "lowobs", active="quality") %}
+  {%- set lo = p.low_obs %}
+  {%- if lo %}
+  {{ conclusion(lo.conclusion, lo.source, p.generated_at) }}
+  <div class="evidence">
+    {% call figure("fig-lowobs", "클래스별 관측 부족 기준값 (포인트 수 하위 10%)", "f9_thresholds.csv", chart=False) %}
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th scope="col">클래스</th><th scope="col" class="is-num">유효 3D 객체</th><th scope="col" class="is-num">기준 순위</th><th scope="col" class="is-num">기준값 (포인트)</th><th scope="col" class="is-num">관측 부족 객체</th><th scope="col">장면 검색</th></tr></thead>
+        <tbody>
+          {%- for r in lo.rows %}
+          <tr>
+            <td>{{ cls_tag(r.cls) }}</td>
+            <td class="is-num">{{ r.n|int }}</td>
+            <td class="is-num">{{ r.k|int }}번째</td>
+            <td class="is-num">{{ r.threshold|int }}</td>
+            <td class="is-num">{{ r.n_low|int }}</td>
+            <td><a href="{{ url_for('pages.search', cls=r.cls, low_obs=1, occ=[0, 1, 2, 3]) }}">{{ r.cls|cls_label }} 관측 부족 장면 검색 →</a></td>
+          </tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small" style="margin-top: var(--space-2);">기준값은 클래스별 포인트 수를 오름차순으로 놓았을 때 ceil(n/10)번째 값이며, 그 값 이하이면 관측 부족입니다. 데이터베이스 과목의 기준값 표(analysis_threshold)와 같은 값입니다. 검색 링크는 가림 0–3을 모두 포함합니다.</p>
+    {% endcall %}
+    {%- for fig in lo.figures %}{{ png(fig, "low-" ~ loop.index) }}{% endfor %}
+  </div>
+  {{ downloads(["f9_thresholds.csv", "f9_low_objects.csv", "f9_low_scenes.csv"]) }}
+  {%- else %}
+  {{ missing("f9_thresholds.csv") }}
+  {%- endif %}
+{% endcall %}
+
+{# --------------------------------------------------------- 정확성·성능 #}
+{% call tabpanel("s5", "perf", active="quality") %}
+  {%- set v = p.verification %}
+  {%- set b = p.bench %}
+  {{ conclusion(p.perf_conclusion, "verification.json · subsets/*/verification.json" ~ (" · bench/summary.csv" if b else ""), v.generated_at if v else None) }}
+  <div class="evidence">
+    {% call figure("fig-accuracy", "Spark ↔ Python 순차 처리 대조 (F-11, 규모별)", "verification.json · subsets/sample_100 · subsets/sample_1000", chart=False) %}
+    {%- if v %}
+    <div class="table-wrap">
+      <table class="data-table data-table--compact scale-grid">
+        <thead><tr><th scope="col">대조 항목</th>{% for s in v.scales %}<th scope="col">{{ s.scale|int }}개 장면</th>{% endfor %}</tr></thead>
+        <tbody>
+          {%- for it in v["items"] %}
+          <tr><td>{{ it.title }}</td>{% for s in v.scales %}<td>{% if s.scale in it.by_scale %}{{ pass_fail(it.by_scale[s.scale]) }}{% else %}{{ badge("결과 없음", "neutral", "·") }}{% endif %}</td>{% endfor %}</tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+    </div>
+    {%- if v.tolerance %}<p class="muted small mono" style="margin-top: var(--space-2);">부동소수 허용 오차: {{ v.tolerance }}</p>{% endif %}
+    {%- else %}
+    {{ missing("verification.json") }}
+    {%- endif %}
+    {% endcall %}
+
+    {% call figure("fig-mysql", "Parquet ↔ MySQL 적재 대조 (F-10·F-11)", "mysql_consistency.json", chart=False) %}
+    {%- set m = p.mysql %}
+    {%- if m %}
+    <p class="mysql-summary">{{ pass_fail(m.summary.passed) }} <span class="num">{{ m.summary.n_ok|int }} / {{ m.summary.n_checks|int }}</span>개 항목 일치</p>
+    <div class="table-wrap" style="margin-top: var(--space-2);">
+      <table class="data-table data-table--compact">
+        <thead><tr><th scope="col">대조 묶음</th><th scope="col" class="is-num">일치 / 항목</th><th scope="col">결과</th></tr></thead>
+        <tbody>
+          {%- for s in m.sections %}<tr><td>{{ s.label }}</td><td class="is-num">{{ s.ok|int }} / {{ s.n|int }}</td><td>{{ pass_fail(s.ok == s.n) }}</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <details class="details-list">
+      <summary>항목 {{ m.checks|length }}개 모두 보기</summary>
+      <div class="table-wrap">
+        <table class="data-table data-table--compact">
+          <thead><tr><th scope="col">묶음</th><th scope="col">항목</th><th scope="col" class="is-num">기대값</th><th scope="col" class="is-num">MySQL</th><th scope="col">결과</th></tr></thead>
+          <tbody>
+            {%- for c in m.checks %}<tr><td>{{ ko.MYSQL_CHECK_SECTIONS.get(c.section, c.section) }}</td><td class="mono small">{{ c.item }}</td><td class="is-num">{{ c.expected }}</td><td class="is-num">{{ c.actual }}</td><td>{{ pass_fail(c.status == "ok") }}</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
+    <p class="muted small" style="margin-top: var(--space-2);">생성 {{ m.generated_at }}</p>
+    {%- else %}
+    {{ missing("mysql_consistency.json") }}
+    {%- endif %}
+    {% endcall %}
+
+    {% call figure("fig-speedup", "속도 향상 (순차 대비 배수, 3회 중앙값 · 최소–최대)", "bench/summary.csv", chart=b is not none and b.speedup|length > 0) %}
+    {%- if b and b.speedup %}
+    <div data-view="chart" class="chart-box"><canvas id="chart-speedup" role="img" aria-label="{{ b.top_scale|int }}개 장면에서 Spark local 1, 4, 8의 순차 대비 속도 향상 그래프, 이상적 선형 증가선 포함"></canvas></div>
+    <div data-view="table" hidden id="fig-speedup-table" class="table-wrap">
+      <table class="data-table data-table--compact">
+        <thead><tr><th scope="col">규모</th><th scope="col">실행 방식</th><th scope="col" class="is-num">처리 시간 중앙값 [최소–최대]</th><th scope="col" class="is-num">속도 향상</th><th scope="col" class="is-num">정상 종료 · 대조 통과</th></tr></thead>
+        <tbody>
+          {%- for r in b.table %}
+          <tr><td class="is-num">{{ r.scale|int }}</td><th scope="row" class="mono">{{ r.label }}</th><td class="is-num">{{ r.wall_median|sec }} [{{ r.wall_min|sec }}–{{ r.wall_max|sec }}]</td><td class="is-num">{% if r.speedup is not none %}{{ "%.2f"|format(r.speedup) }}배{% else %}—{% endif %}</td><td class="is-num">{{ r.n_exit0 }}/{{ r.n_runs }} · {{ r.n_verify_pass }}/{{ r.n_runs }}</td></tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+    </div>
+    {%- else %}
+    {{ empty_state(ko.STATE_MESSAGES.bench_pending_title, ko.STATE_MESSAGES.bench_pending_body, compact=True) }}
+    {%- endif %}
+    {% endcall %}
+
+    {% call figure("fig-mem", "메모리 peak (샘플링한 프로세스 트리 RSS, MiB)", "bench/summary.csv", chart=False) %}
+    {%- if b %}
+    <div class="table-wrap">
+      <table class="data-table data-table--compact">
+        <thead><tr><th scope="col">규모</th><th scope="col">실행 방식</th><th scope="col" class="is-num">중앙값 [최소–최대]</th></tr></thead>
+        <tbody>
+          {%- for r in b.table %}<tr><td class="is-num">{{ r.scale|int }}</td><th scope="row" class="mono">{{ r.label }}</th><td class="is-num">{{ r.rss_median|int }} [{{ r.rss_min|int }}–{{ r.rss_max|int }}]</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small" style="margin-top: var(--space-2);">psutil로 100 ms마다 잰 프로세스 트리 RSS 합의 최댓값입니다. 공유 페이지가 중복 계산될 수 있고 100 ms보다 짧은 피크는 놓칠 수 있습니다.</p>
+    {%- else %}
+    {{ empty_state(ko.STATE_MESSAGES.bench_pending_title, ko.STATE_MESSAGES.bench_pending_body, compact=True) }}
+    {%- endif %}
+    {% endcall %}
+
+    {% call figure("fig-env", "측정 환경 (N-3)", "bench/environment.json", chart=False) %}
+    {%- if b and b.env %}
+    <dl class="kv">{% for k, val in b.env %}<dt>{{ k }}</dt><dd>{{ val }}</dd>{% endfor %}</dl>
+    {%- else %}
+    {{ empty_state(ko.STATE_MESSAGES.bench_pending_title, ko.STATE_MESSAGES.bench_pending_body, compact=True) }}
+    {%- endif %}
+    {% endcall %}
+  </div>
+  {{ downloads(["verification.json", "verification.md", "subsets/sample_100/verification.json", "subsets/sample_1000/verification.json", "mysql_consistency.json", "f5_dataframe_vs_sql.json"]) }}
+{% endcall %}
+
+<script type="application/json" id="pipeline-data">{{ {
+  "dist": p.distribution,
+  "speedup": p.bench.speedup if p.bench else [],
+  "labels": ko.CLASS_LABELS,
+  "slugs": ko.CLASS_SLUGS,
+}|tojson }}</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chartjs/chart.umd.min.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/pipeline.js') }}?v={{ asset_v }}" defer></script>
+{% endblock %}

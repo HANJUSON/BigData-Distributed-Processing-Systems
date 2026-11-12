@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 원본·대용량 산출물은 저장소 밖(~/data/kitti, KITTI_WORK)에 둔다. 실수로 들어오는 것을 막는다.
+*.parquet
+parquet/
+spark-tmp/
+spark-warehouse/
+metastore_db/
+derby.log
+
+# 도구 상태·비밀·원본 데이터(저장소에 필요한 파일 중 이 패턴에 걸리는 것은 없다: 정적 자산은 .woff2·.svg·.js·.css)
+.omc/
+.my.cnf
+*.my.cnf
+.env
+*.bin
+*.webp

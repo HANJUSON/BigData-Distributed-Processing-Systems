@@ -1,0 +1,9 @@
+class,n,k,threshold
+Car,28741,2875,11
+Van,2912,292,20
+Truck,1091,110,49
+Pedestrian,4487,449,19
+Person_sitting,222,23,37
+Cyclist,1627,163,14
+Tram,510,51,3
+Misc,972,98,25

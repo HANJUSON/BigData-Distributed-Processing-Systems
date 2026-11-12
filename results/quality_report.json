@@ -1,0 +1,186 @@
+{
+  "generated_at": "2026-11-05T04:24:50+00:00",
+  "root": "~/data/kitti",
+  "work": "~/data/kitti/work",
+  "master": "local[8]",
+  "n_partitions": 32,
+  "frame_set": {
+    "n": 7481,
+    "sha256": "ed822896af3e966c5181d25178c5e93e13221e04dd681443a2ac415da4ab494e"
+  },
+  "completeness": {
+    "n_expected": 7481,
+    "n_linked": 7481,
+    "missing_by_kind": {},
+    "complete": true
+  },
+  "index": {
+    "n_frames": 7481,
+    "n_linked": 7481,
+    "files_per_kind": {
+      "image_2": 7481,
+      "velodyne": 7481,
+      "label_2": 7481,
+      "calib": 7481
+    },
+    "missing": {
+      "image_2": {
+        "count": 0,
+        "ids": []
+      },
+      "velodyne": {
+        "count": 0,
+        "ids": []
+      },
+      "label_2": {
+        "count": 0,
+        "ids": []
+      },
+      "calib": {
+        "count": 0,
+        "ids": []
+      }
+    },
+    "unlinked": {
+      "count": 0,
+      "ids": []
+    },
+    "duplicates": {
+      "count": 0,
+      "ids": [],
+      "files": {}
+    },
+    "ignored_files": {
+      "count": 0,
+      "examples": []
+    }
+  },
+  "labels": {
+    "n_files_parsed": 7481,
+    "parse_errors": {
+      "count": 0,
+      "items": []
+    },
+    "n_objects_total": 51865,
+    "dontcare": {
+      "count": 11295,
+      "note": "DontCare는 무시 영역 표식이라 3D 값이 원래 무효다. 일반 객체 오류와 따로 세며 objects에 is_dontcare=true, valid_3d=false로 보존한다."
+    },
+    "object_errors": {
+      "n_objects_with_error": 0,
+      "by_reason": {},
+      "items": [],
+      "note": "DontCare 제외 일반 객체만. 한 객체가 여러 사유를 가질 수 있다."
+    },
+    "invalid_3d": {
+      "count": 8,
+      "ids": [
+        [
+          301,
+          2
+        ],
+        [
+          1628,
+          2
+        ],
+        [
+          2465,
+          1
+        ],
+        [
+          2520,
+          2
+        ],
+        [
+          3216,
+          2
+        ],
+        [
+          3396,
+          2
+        ],
+        [
+          4825,
+          10
+        ],
+        [
+          5029,
+          1
+        ]
+      ],
+      "note": "DontCare 제외. h,w,l > 0 이고 z > 0 이 아닌 객체 [frame_id, object_id]."
+    }
+  },
+  "calib": {
+    "parse_errors": {
+      "count": 0,
+      "items": []
+    }
+  },
+  "image": {
+    "header_errors": {
+      "count": 0,
+      "items": []
+    }
+  },
+  "points": {
+    "bad_bin_size": {
+      "count": 0,
+      "items": []
+    },
+    "by_reason": {
+      "non_finite": 0,
+      "coord_range": 0,
+      "reflectance_range": 0
+    },
+    "n_points_with_error": 0,
+    "frames_with_error": {
+      "count": 0,
+      "ids": []
+    },
+    "policy": "비정상 포인트도 points Parquet에 그대로 쓴다(point_id = 원본 레코드 순서). 보고만 하고 지우지 않는다.",
+    "criteria": "non_finite: x,y,z,reflectance NaN/Inf; coord_range: |x|,|y|,|z| > 200.0 m; reflectance_range: [0,1] 밖"
+  },
+  "d3_processed": {
+    "n_frames_processed": 7481,
+    "bytes": {
+      "image_2": 6220741348,
+      "velodyne": 14270717376,
+      "label_2": 4239487,
+      "calib": 12070409
+    },
+    "bytes_total": 20507768620,
+    "total_points": 891919836,
+    "note": "실제로 읽은 파일의 크기 합. image_2는 PNG 헤더만 읽지만 연결·처리한 파일 크기를 센다. 읽기에 실패한 파일(크기 오류 .bin, 파싱 오류 라벨 등)은 제외한다."
+  },
+  "parquet": {
+    "dir": "~/data/kitti/work/parquet",
+    "removed_derived_tables": [],
+    "frames": {
+      "rows": 7481,
+      "files": 1,
+      "bytes": 136153
+    },
+    "objects": {
+      "rows": 51865,
+      "files": 1,
+      "bytes": 1215511
+    },
+    "points": {
+      "rows": 891919836,
+      "files": 32,
+      "bytes": 9151933634,
+      "compression": "zstd",
+      "max_task_seconds": 5.296
+    }
+  },
+  "timings_s": {
+    "index": 0.545,
+    "spark_start": 7.738,
+    "process_frames": 21.34,
+    "write_frames": 2.886,
+    "write_objects": 1.039,
+    "finalize": 0.006,
+    "total": 33.59
+  }
+}

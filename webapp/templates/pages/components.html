@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/buttons.html" import button, icon_button %}
+{% from "macros/forms.html" import checkbox, toggle, toggle_group, dual_range, number_range, select %}
+{% from "macros/chips.html" import chip, chip_list %}
+{% from "macros/badges.html" import badge, low_obs, review_status, verdict, difficulty, cls_tag, obj_num, pass_fail %}
+{% from "macros/cards.html" import result_card %}
+{% from "macros/table.html" import sort_th %}
+{% from "macros/tabs.html" import tablist, tabpanel %}
+{% from "macros/feedback.html" import tooltip, toast, skeleton_cards, skeleton_lines, empty_state, error_state, partial_state, notice, progress %}
+{% from "macros/navigation.html" import pagination %}
+
+{% block title %}컴포넌트 갤러리{% endblock %}
+{% block body_class %}wide-page{% endblock %}
+{% block main_class %}page--full{% endblock %}
+
+{%- macro gallery(sfx) -%}
+<section>
+  <h3>색 토큰</h3>
+  <div class="swatches">
+    {%- for t in ["bg", "surface", "border", "text", "text-muted", "accent", "warn", "danger", "ok"] %}
+    <div class="swatch"><div class="swatch__chip" style="--sw: var(--{{ t }})"></div><div class="swatch__name">--{{ t }}</div></div>
+    {%- endfor %}
+  </div>
+  <div class="swatches" style="margin-top: var(--space-2);">
+    {%- for key, meta in ko.CLASSES.items() %}
+    <div class="swatch"><div class="swatch__chip" style="--sw: var(--cls-{{ meta.slug }}){% if meta.slug == 'dontcare' %}; background: repeating-linear-gradient(135deg, var(--cls-dontcare) 0 2px, transparent 2px 6px){% endif %}"></div><div class="swatch__name">{{ meta.label }}</div></div>
+    {%- endfor %}
+  </div>
+</section>
+
+<section>
+  <h3>글자 크기 (6단계)</h3>
+  <div class="type-scale">
+    <p style="font-size: var(--fs-32); font-weight: 700; line-height: 1.2;">32 장면 000123</p>
+    <p style="font-size: var(--fs-24); font-weight: 700;">24 보행자의 62%가 20 m 이내</p>
+    <p style="font-size: var(--fs-20); font-weight: 600;">20 장면 1,284개</p>
+    <p style="font-size: var(--fs-16);">16 이 장면은 어떤가?</p>
+    <p>14 본문 — 한 객체가 입력한 조건을 모두 만족하는 장면을 찾습니다.</p>
+    <p class="small muted">12 보조 문구 · <span class="num">1,842 · 12.4 m · 0.15</span></p>
+  </div>
+</section>
+
+<section>
+  <h3>버튼</h3>
+  <div class="row">
+    {{ button("프리셋 저장", "primary", id="b1" ~ sfx) }}
+    {{ button("결과 보기", "secondary", id="b2" ~ sfx) }}
+    {{ button("세트 삭제", "danger", id="b3" ~ sfx) }}
+    {{ button("링크 복사", "ghost", icon_name="link", id="b4" ~ sfx) }}
+  </div>
+  <div class="row">
+    {{ button("작게", "primary", size="sm", id="b5" ~ sfx) }}
+    {{ button("판정 남기기", "primary", id="b6" ~ sfx, disabled_reason=ko.UI.reviewer_required) }}
+    {{ button("비활성", "secondary", id="b7" ~ sfx, disabled=True) }}
+    {{ icon_button("확대", "zoom-in") }}{{ icon_button("초기화", "reset") }}
+  </div>
+</section>
+
+<section>
+  <h3>체크박스 · 토글 · 토글 그룹</h3>
+  <div class="check-grid" style="max-width: 280px;">
+    {{ checkbox("cls", "Car", "차량", True, "car", id="g-car" ~ sfx) }}
+    {{ checkbox("cls", "Pedestrian", "보행자", False, "pedestrian", id="g-ped" ~ sfx) }}
+    {{ checkbox("cls", "Person_sitting", "앉은 사람", True, "person-sitting", id="g-ps" ~ sfx) }}
+    {{ checkbox("cls", "Cyclist", "자전거", False, "cyclist", id="g-cyc" ~ sfx) }}
+  </div>
+  <div class="row">
+    {{ toggle("low_obs", "관측 부족만", True, id="g-tg1" ~ sfx, info="클래스별 기준값보다 포인트가 적은 객체만 봅니다.") }}
+    {{ toggle("unrev", "미검수만", False, id="g-tg2" ~ sfx) }}
+  </div>
+  <div style="max-width: 280px; margin-top: var(--space-3);">{{ toggle_group("occ" ~ sfx, "가림", [(0, "보임"), (1, "일부"), (2, "대부분")], [1]) }}</div>
+</section>
+
+<section>
+  <h3>이중 범위 슬라이더 · 숫자 범위 · 선택</h3>
+  <div style="max-width: 280px;">
+    {{ dual_range("g-dist" ~ sfx, "거리", "dmin", "dmax", 0, 80, 5, 30, 80, "m") }}
+    {{ number_range("g-pts" ~ sfx, "포인트 수 (오류 예)", "pmin", "pmax", 500, 100) }}
+    <div class="field">{{ select("sort", "정렬", ko.SORT_OPTIONS.items()|list, "far", id="g-sort" ~ sfx) }}</div>
+  </div>
+</section>
+
+<section>
+  <h3>조건 칩</h3>
+  {{ chip_list([{"label": "보행자", "href": "#", "slug": "pedestrian"}, {"label": "30–80 m", "href": "#"}, {"label": "일부 가림", "href": "#"}, {"label": "관측 부족만", "href": "#", "warn": True}], "#") }}
+</section>
+
+<section>
+  <h3>배지 · 클래스 표지</h3>
+  <div class="row">{{ low_obs() }}{{ low_obs(2) }}{{ review_status("pending") }}{{ review_status("reviewed") }}{{ review_status("disputed") }}</div>
+  <div class="row">{{ difficulty(1) }}{{ difficulty(2) }}{{ difficulty(3) }}{{ difficulty(None) }}</div>
+  <div class="row">{{ verdict("ok") }}{{ verdict("label_error") }}{{ verdict("low_obs") }}{{ verdict(None) }}{{ pass_fail(True) }}{{ pass_fail(False) }}</div>
+  <div class="row">
+    {%- for key in ko.CLASSES %}{{ obj_num(loop.index, key) }}{% endfor %}
+  </div>
+  <div class="row">{% for key in ko.CLASSES %}{{ cls_tag(key) }}{% endfor %}</div>
+</section>
+
+<section>
+  <h3>결과 카드</h3>
+  <ul class="card-grid" role="list">
+    {%- for c in sample_cards %}<li>{{ result_card(c, "#", demo=True) }}</li>{% endfor %}
+  </ul>
+</section>
+
+<section>
+  <h3>정렬 가능한 표</h3>
+  <div class="table-wrap">
+    <table class="data-table" data-sortable>
+      <thead><tr>{{ sort_th("#", "id", True, "asc") }}{{ sort_th("종류", "cls") }}{{ sort_th("거리", "d", True) }}{{ sort_th("포인트", "p", True) }}</tr></thead>
+      <tbody>
+        {%- for o in scene.objects if o.cls != "DontCare" %}
+        <tr><td class="is-num" data-sort="{{ o.id }}">{{ obj_num(o.id, o.cls) }}</td><td>{{ cls_tag(o.cls) }}</td><td class="is-num" data-sort="{{ o.dist_m }}">{{ o.dist_m|dist }}</td>
+          <td class="is-num" data-sort="{{ o.num_points if o.num_points is not none else '' }}">{% if o.num_points is none %}<span class="null-note muted small">{{ ko.UI.points_null }}</span>{% else %}{{ o.num_points|int }}{% endif %}</td></tr>
+        {%- endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h3>탭</h3>
+  {{ tablist("gt" ~ sfx, [("a", "데이터 품질"), ("b", "분포"), ("c", "정확성·성능")], "a", "갤러리 탭") }}
+  {% call tabpanel("gt" ~ sfx, "a", "a") %}<p>첫 번째 탭 내용입니다. ←·→ 키로 탭을 옮깁니다.</p>{% endcall %}
+  {% call tabpanel("gt" ~ sfx, "b", "a") %}<p>두 번째 탭 내용입니다.</p>{% endcall %}
+  {% call tabpanel("gt" ~ sfx, "c", "a") %}<p>세 번째 탭 내용입니다.</p>{% endcall %}
+</section>
+
+<section>
+  <h3>툴팁 · 알림</h3>
+  <div class="row">
+    <span>관측 부족</span>{{ tooltip("g-tip" ~ sfx, "3D 박스 안 LiDAR 포인트 수가 클래스별 기준값 이하인 객체입니다.", "관측 부족 설명") }}
+    <button type="button" class="btn btn--secondary btn--sm" data-toast-demo="판정을 저장했습니다.">알림 띄우기</button>
+    <button type="button" class="btn btn--secondary btn--sm" data-toast-demo="판정을 삭제했습니다." data-undo data-tone="info">되돌리기 알림</button>
+  </div>
+  <div class="toast-region toast-demo" style="margin-top: var(--space-3);">
+    {{ toast("프리셋을 저장했습니다.") }}
+    {{ toast("판정을 삭제했습니다.", "info", "되돌리기") }}
+  </div>
+</section>
+
+<section>
+  <h3>안내 띠 · 진행 표시줄</h3>
+  <div class="stack">
+    {{ notice("기준값 산출 일시: 11/18 14:02", "info") }}
+    {{ notice(ko.UI.demo_notice, "warn", ko.UI.demo_badge) }}
+    {{ notice("마감된 세트라 판정을 저장할 수 없습니다.", "danger") }}
+    {{ notice("모든 대조 항목이 일치합니다.", "ok") }}
+    {{ progress(ko.STATE_MESSAGES.loading_points) }}
+    {{ progress("결과 파일 읽는 중…", 64) }}
+  </div>
+</section>
+
+<section>
+  <h3>스켈레톤 (로딩)</h3>
+  <div class="skeleton-group" aria-hidden="true"><div class="card-grid">{% for _ in range(2) %}<div class="skel-card"><div class="skel skel--thumb"></div><div class="skel-card__body"><div class="skel skel--line" style="width: 40%"></div><div class="skel skel--line" style="width: 72%"></div></div></div>{% endfor %}</div></div>
+  <div style="margin-top: var(--space-3);">{{ skeleton_lines(3) }}</div>
+</section>
+
+<section>
+  <h3>빈 상태 · 오류 상태 · 부분 성공</h3>
+  <div class="stack">
+    {% call empty_state(ko.STATE_MESSAGES.empty_title, ko.STATE_MESSAGES.empty_relax.format(field="거리", count="312"), compact=True) %}
+      <a class="btn btn--secondary btn--sm" href="#">원거리 · 일부 가림 · 보행자</a>
+    {% endcall %}
+    {{ error_state(ko.STATE_MESSAGES.error_title, ko.STATE_MESSAGES.error_db, "pymysql.err.OperationalError: (2003, \"Can't connect to MySQL server on 'localhost' ([Errno 111] Connection refused)\")", compact=True) }}
+    {{ partial_state(ko.STATE_MESSAGES.partial_lidar.format(filename="000123.bin")) }}
+    <div class="viz" style="padding: var(--space-3); border-radius: var(--radius);">{{ partial_state(ko.STATE_MESSAGES.partial_lidar.format(filename="000123.bin"), dark=True) }}</div>
+  </div>
+</section>
+
+<section>
+  <h3>페이지 이동</h3>
+  {{ pagination(3, 54, page_href) }}
+</section>
+{%- endmacro -%}
+
+{%- macro page_href(n) -%}#p{{ n }}{%- endmacro -%}
+
+{% block content %}
+<div class="page" style="padding-bottom: var(--space-4);">
+  <p class="page-head__eyebrow">개발용 · debug 모드에서만 열림</p>
+  <h1>컴포넌트 갤러리</h1>
+  <p class="page-head__q">모든 Jinja2 매크로를 라이트·다크 두 테마로 나란히 그립니다. 시각 QA 전용 화면입니다.</p>
+</div>
+<div class="gallery">
+  <div class="gallery__theme" data-theme="light"><h2>라이트</h2>{{ gallery("-l") }}</div>
+  <div class="gallery__theme" data-theme="dark"><h2>다크</h2>{{ gallery("-d") }}</div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{
+  "generated_at": "2026-11-05T04:27:51Z",
+  "work": "~/data/kitti/work",
+  "frame_subset": 100,
+  "frame_set": {
+    "n": 100,
+    "sha256": "283d3a49d8c24310e0d2eb9bfe1fb1a2ddf55d0d75e09396b725e46cc2737158"
+  },
+  "parquet_out": "~/data/kitti/work/subsets/sample_100",
+  "n_frames": 100,
+  "n_frames_processed": 100,
+  "n_objects_non_dontcare": 567,
+  "n_dontcare": 133,
+  "objects_per_class": {
+    "Car": 403,
+    "Cyclist": 23,
+    "Misc": 17,
+    "Pedestrian": 62,
+    "Person_sitting": 2,
+    "Tram": 4,
+    "Truck": 22,
+    "Van": 34
+  },
+  "f5_pass": true,
+  "f6": {
+    "grid_rows": 141543,
+    "total_points_in_roi": 5988458,
+    "share_points_x_lt_20m_pct": 90.64,
+    "peak_cell": {
+      "grid_x": 2,
+      "grid_y": 36,
+      "mean_points": 779.59
+    },
+    "sample_frames": [
+      56,
+      178,
+      192
+    ]
+  },
+  "f7": {
+    "share_within_20m_pct": {
+      "Car": 34.24,
+      "Cyclist": 43.48,
+      "Misc": 5.88,
+      "Pedestrian": 59.68,
+      "Person_sitting": 100.0,
+      "Tram": 25.0,
+      "Truck": 4.55,
+      "Van": 32.35
+    }
+  },
+  "f9": {
+    "thresholds": {
+      "Car": {
+        "n": 403,
+        "k": 41,
+        "threshold": 11
+      },
+      "Van": {
+        "n": 34,
+        "k": 4,
+        "threshold": 17
+      },
+      "Truck": {
+        "n": 22,
+        "k": 3,
+        "threshold": 56
+      },
+      "Pedestrian": {
+        "n": 62,
+        "k": 7,
+        "threshold": 25
+      },
+      "Person_sitting": {
+        "n": 2,
+        "k": 1,
+        "threshold": 49
+      },
+      "Cyclist": {
+        "n": 23,
+        "k": 3,
+        "threshold": 19
+      },
+      "Tram": {
+        "n": 4,
+        "k": 1,
+        "threshold": 32
+      },
+      "Misc": {
+        "n": 17,
+        "k": 2,
+        "threshold": 28
+      }
+    },
+    "n_low_objects": 63,
+    "n_low_scenes": 33,
+    "n_low_by_class": {
+      "Car": 41,
+      "Cyclist": 3,
+      "Misc": 2,
+      "Pedestrian": 8,
+      "Person_sitting": 1,
+      "Tram": 1,
+      "Truck": 3,
+      "Van": 4
+    }
+  },
+  "timings_s": {
+    "f5": 9.512,
+    "f6": 4.034,
+    "f7": 1.685,
+    "f9": 2.458
+  },
+  "source": "Source: KITTI Vision Benchmark Suite, 3D object training set (CC BY-NC-SA 3.0)"
+}

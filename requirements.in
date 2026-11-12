@@ -1,0 +1,10 @@
+pyspark==4.3.0
+pyarrow
+pandas<3
+numpy
+matplotlib
+psutil
+flask
+pymysql
+pillow
+pytest

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/buttons.html" import button, icon_button %}
+{% from "macros/badges.html" import obj_num, cls_tag, difficulty, verdict, badge %}
+{% from "macros/table.html" import sort_th %}
+{% from "macros/feedback.html" import progress, partial_state, notice, tooltip %}
+
+{% set fid = scene.frame_id|frame %}
+{% set pos = scene.position %}
+{% set objs = scene.objects|rejectattr("cls", "equalto", "DontCare")|list %}
+{% set dontcare = scene.objects|selectattr("cls", "equalto", "DontCare")|list %}
+{% set iw, ih = scene.image_size %}
+
+{% block title %}장면 {{ fid }}{% endblock %}
+{% block body_class %}scene-page{% endblock %}
+{% block main_class %}page--full{% endblock %}
+
+{% block content %}
+<div class="scene-bar">
+  <a class="scene-bar__back" href="{{ scene.back_href }}" data-nav-back>
+    {{ icon("arrow-left") }}<span>{{ ko.UI.back_to_results }}{% if pos %} <span class="num">({{ pos.index|int }} / {{ pos.total|int }})</span>{% endif %}</span>
+  </a>
+  <h1 class="scene-bar__title">장면 <span class="mono">{{ fid }}</span></h1>
+  {% if scene.is_demo %}{{ badge(ko.UI.demo_badge, "warn", "⚠", ko.UI.demo_notice) }}{% endif %}
+  <div class="scene-bar__nav">
+    {%- if pos and pos.prev is not none %}
+    <a class="btn btn--secondary btn--sm" href="{{ pos.prev_href }}" rel="prev" data-nav-prev aria-keyshortcuts="ArrowLeft">{{ icon("chevron-left") }}<span>{{ ko.UI.prev }}</span></a>
+    {%- else %}
+    <button class="btn btn--secondary btn--sm" type="button" disabled>{{ icon("chevron-left") }}<span>{{ ko.UI.prev }}</span></button>
+    {%- endif %}
+    {%- if pos and pos.next is not none %}
+    <a class="btn btn--secondary btn--sm" href="{{ pos.next_href }}" rel="next" data-nav-next aria-keyshortcuts="ArrowRight"><span>{{ ko.UI.next }}</span>{{ icon("chevron-right") }}</a>
+    {%- else %}
+    <button class="btn btn--secondary btn--sm" type="button" disabled><span>{{ ko.UI.next }}</span>{{ icon("chevron-right") }}</button>
+    {%- endif %}
+    <button class="btn btn--ghost btn--sm" type="button" data-copy-link data-done="{{ ko.STATE_MESSAGES.link_copied }}">{{ icon("link") }}<span>{{ ko.UI.copy_link }}</span></button>
+  </div>
+</div>
+
+<div class="scene-grid" data-scene>
+  {# --------------------------------------------------------- 카메라 이미지 #}
+  <section class="panel panel--cam viz" aria-labelledby="cam-title">
+    <div class="panel__head">
+      <h2 class="panel__title" id="cam-title">카메라 이미지 <span class="panel__sub">{{ iw }}×{{ ih }} · 2D 박스와 번호</span></h2>
+      <fieldset class="panel__tools">
+        <legend class="visually-hidden">이미지 레이어</legend>
+        <label class="check" for="layer-boxes"><input type="checkbox" id="layer-boxes" data-layer="boxes" checked><span class="check__box" aria-hidden="true"></span><span class="check__label">박스</span></label>
+        <label class="check" for="layer-labels"><input type="checkbox" id="layer-labels" data-layer="labels" checked><span class="check__box" aria-hidden="true"></span><span class="check__label">라벨</span></label>
+        <label class="check" for="layer-dontcare"><input type="checkbox" id="layer-dontcare" data-layer="dontcare"><span class="check__box" aria-hidden="true"></span><span class="cls-dot cls-dot--dontcare" aria-hidden="true"></span><span class="check__label">무시 영역 ({{ dontcare|length }})</span></label>
+      </fieldset>
+    </div>
+    <div class="camera" id="camera" data-boxes="on" data-labels="on" data-dontcare="off" style="aspect-ratio: {{ iw }} / {{ ih }};"
+         role="img" aria-label="장면 {{ fid }} 카메라 이미지, 정답 객체 {{ objs|length }}개{% if scene.is_demo %} (데모: 원본 이미지 대신 박스만 표시){% endif %}">
+      {%- if not scene.is_demo and not scene.image_missing %}
+      <img class="camera__img" src="{{ url_for('pages.scene_image', frame_id=scene.frame_id) }}" width="{{ iw }}" height="{{ ih }}" alt="" decoding="async" fetchpriority="high">
+      {%- elif scene.image_missing %}
+      <div class="camera__missing">{{ partial_state(ko.STATE_MESSAGES.partial_image.format(filename=scene.image_missing), dark=True) }}</div>
+      {%- endif %}
+      {%- if scene.is_demo %}
+      <svg viewBox="0 0 1242 375" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path class="camera__guide" d="M0 196 L1242 196 M621 176 L-200 375 M621 176 L1442 375 M621 176 L330 375 M621 176 L912 375"/>
+      </svg>
+      <span class="camera__demo">데모 · 원본 이미지는 데이터 연결 후 표시됩니다</span>
+      {%- endif %}
+      {%- for o in scene.objects %}
+      {%- set b = o.bbox %}
+      <div class="ibox ibox--{{ o.cls|cls_slug }}{% if o.low_obs %} is-low{% endif %}{% if b[1] < 30 %} tag-in{% endif %}" data-obj="{{ o.id }}"
+           style="left: {{ (b[0] / iw * 100)|round(3) }}%; top: {{ (b[1] / ih * 100)|round(3) }}%; width: {{ ((b[2] - b[0]) / iw * 100)|round(3) }}%; height: {{ ((b[3] - b[1]) / ih * 100)|round(3) }}%;"
+           aria-hidden="true">
+        {%- if o.cls != "DontCare" %}
+        <span class="ibox__tag"><span class="ibox__num">{{ o.id }}</span><span class="ibox__name">{{ o.cls|cls_label }}{% if o.low_obs %} · ⚠ 관측 부족{% endif %}</span>{% if o.low_obs %}<span class="ibox__warn" aria-hidden="true">⚠</span>{% endif %}</span>
+        {%- endif %}
+      </div>
+      {%- endfor %}
+    </div>
+  </section>
+
+  {# --------------------------------------------------------- LiDAR BEV #}
+  <section class="panel panel--bev viz" aria-labelledby="bev-title">
+    <div class="panel__head">
+      <h2 class="panel__title" id="bev-title">LiDAR BEV <span class="panel__sub">위에서 본 평면 · 앞 {{ scene.roi.fwd_max|int }} m</span></h2>
+      <div class="panel__tools">
+        <div class="field field--inline">
+          <label class="field__label" for="bev-color">색상</label>
+          <span class="select select--compact">
+            <select id="bev-color">
+              <option value="z">높이</option>
+              <option value="i">반사 강도</option>
+            </select>
+          </span>
+        </div>
+        <span class="btn-row" role="group" aria-label="BEV 확대">
+          {{ icon_button("확대", "zoom-in", attrs={"data-bev-zoom": "in"}) }}
+          {{ icon_button("축소", "zoom-out", attrs={"data-bev-zoom": "out"}) }}
+          {{ icon_button("초기화", "reset", attrs={"data-bev-reset": ""}) }}
+        </span>
+      </div>
+    </div>
+    <div class="bev" id="bev" data-src="{{ url_for('pages.scene_points', frame_id=scene.frame_id) }}"
+         tabindex="0" role="img" aria-label="장면 {{ fid }} LiDAR 점군을 위에서 본 그림. 정답 박스 {{ objs|selectattr('footprint')|list|length }}개. 휠로 확대, 드래그로 이동합니다."
+         aria-describedby="bev-help">
+      <canvas id="bev-canvas"></canvas>
+      <div class="bev__overlay" data-bev-loading>{{ progress(ko.STATE_MESSAGES.loading_points) }}</div>
+      <div class="bev__overlay" data-bev-error hidden>{{ partial_state(ko.STATE_MESSAGES.partial_lidar.format(filename=fid ~ ".bin"), dark=True) }}</div>
+    </div>
+    {%- if scene.calib_missing %}
+    {{ notice(ko.STATE_MESSAGES.partial_calib.format(filename=scene.calib_missing), "warn") }}
+    {%- endif %}
+    <div class="panel__foot">
+      <span class="bev__legend" data-legend-z><span>낮음</span><span class="bev__ramp" aria-hidden="true"></span><span>높음</span><span class="visually-hidden">(viridis 색상표)</span></span>
+      <span>격자 10 m</span>
+      <span class="bev__hint" id="bev-help">휠 확대 · 드래그 이동 · <kbd>+</kbd> <kbd>−</kbd></span>
+    </div>
+  </section>
+
+  {# --------------------------------------------------------- 객체 표 #}
+  <section class="panel panel--table" aria-labelledby="obj-title">
+    <div class="panel__head">
+      <h2 class="panel__title" id="obj-title">객체 <span class="num">({{ objs|length }})</span></h2>
+      <div class="panel__tools">
+        {{ tooltip("tip-low-obs", "⚠ 관측 부족: 3D 박스 안 포인트 수가 클래스 기준값 이하입니다. 기준 산출: " ~ scene.threshold_computed_at, "관측 부족 설명") }}
+      </div>
+    </div>
+    <div class="obj-table">
+      <table class="data-table" data-sortable id="obj-table">
+        <caption class="visually-hidden">장면 {{ fid }}의 정답 객체. 열 머리를 눌러 정렬합니다. 행을 누르면 이미지와 BEV에서 같은 객체가 강조됩니다.</caption>
+        <thead>
+          <tr>
+            {{ sort_th("#", "id", numeric=True, sorted="asc") }}
+            {{ sort_th("종류", "cls") }}
+            {{ sort_th("거리", "dist", numeric=True) }}
+            {{ sort_th("가림", "occ", numeric=True) }}
+            {{ sort_th("잘림", "trunc", numeric=True) }}
+            {{ sort_th("포인트", "pts", numeric=True) }}
+            {{ sort_th("난이도", "diff", numeric=True) }}
+            {{ sort_th("판정", "verdict") }}
+          </tr>
+        </thead>
+        <tbody>
+          {%- for o in objs %}
+          <tr data-obj="{{ o.id }}" tabindex="0" aria-label="객체 {{ o.id }} {{ o.cls|cls_label }}">
+            <td class="is-num" data-sort="{{ o.id }}">{{ obj_num(o.id, o.cls) }}</td>
+            <td>{{ cls_tag(o.cls) }}</td>
+            <td class="is-num" data-sort="{{ o.dist_m }}">{{ o.dist_m|dist }}</td>
+            <td data-sort="{{ o.occluded }}">{{ o.occluded|occ_label(true) }}</td>
+            <td class="is-num" data-sort="{{ o.truncated }}">{{ o.truncated|fixed2 }}</td>
+            {%- if o.num_points is none %}
+            <td class="is-num" data-sort=""><span class="null-note">{{ ko.UI.points_null }}</span></td>
+            {%- elif o.low_obs %}
+            <td class="is-num is-warn" data-sort="{{ o.num_points }}"><span aria-hidden="true">⚠ </span><span class="visually-hidden">관측 부족, </span>{{ o.num_points|int }}</td>
+            {%- else %}
+            <td class="is-num" data-sort="{{ o.num_points }}">{{ o.num_points|int }}</td>
+            {%- endif %}
+            <td data-sort="{{ o.diff_level if o.diff_level is not none else '' }}">{{ difficulty(o.diff_level) }}</td>
+            <td>{{ verdict(o.verdict) }}</td>
+          </tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="selection-bar" aria-live="polite">
+      <span class="selection-bar__what" data-selection>객체를 고르면 이미지와 BEV에서 함께 강조됩니다.</span>
+      {{ button("판정 남기기", "primary", size="sm", id="btn-verdict", disabled_reason=ko.UI.reviewer_required ~ " (검수 기능은 데이터베이스 과목 프로젝트에서 구현합니다.)") }}
+      <span class="selection-bar__why">{{ ko.UI.reviewer_required }}</span>
+    </div>
+    <div class="mobile-only">{{ notice(ko.UI.mobile_review_unsupported, "info") }}</div>
+  </section>
+</div>
+
+<script type="application/json" id="scene-data">{{ {
+  "frame_id": scene.frame_id,
+  "roi": scene.roi,
+  "objects": objs|map(attribute="id")|list,
+  "footprints": objs|selectattr("footprint")|map(attribute="footprint")|list,
+  "footprint_ids": objs|selectattr("footprint")|map(attribute="id")|list,
+  "classes": objs|selectattr("footprint")|map(attribute="cls")|map("cls_slug")|list,
+  "labels": objs|map(attribute="cls")|map("cls_label")|list,
+}|tojson }}</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/scene.js') }}?v={{ asset_v }}" defer></script>
+{% endblock %}

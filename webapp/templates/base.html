@@ -1,0 +1,99 @@
+{%- from "macros/icons.html" import icon -%}
+{%- from "macros/feedback.html" import toast_region, tooltip -%}
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ ko.APP_NAME }}{% endblock %} · {{ ko.APP_NAME }}</title>
+  <meta name="description" content="KITTI 학습 장면 7,481개를 조건으로 검색하고 카메라 이미지·LiDAR·정답 박스를 함께 보는 장면 탐색 도구">
+  {#- 저장된 테마를 첫 그림 전에 적용(깜빡임 방지). 저장소 접근이 막혀도 시스템 설정을 따른다. -#}
+  <script src="{{ url_for('static', filename='js/theme.js') }}?v={{ asset_v }}"></script>
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
+  <link rel="preload" href="{{ url_for('static', filename='fonts/pretendard/Pretendard-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tokens.css') }}?v={{ asset_v }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}?v={{ asset_v }}">
+  <noscript><style>.tabs__panel[hidden]{display:block}.skeleton-delay{display:none}</style></noscript>
+  {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <a class="skip-link" href="#main">{{ ko.UI.skip_link }}</a>
+
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+      <a class="brand" href="{{ url_for('pages.search') }}">
+        <span class="brand__mark" aria-hidden="true">{{ icon("logo", 20) }}</span>
+        <span class="brand__name">{{ ko.APP_NAME }}</span>
+      </a>
+
+      <button type="button" class="btn btn--ghost btn--icon nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="{{ ko.UI.menu }}" data-nav-toggle>{{ icon("menu", 20) }}</button>
+
+      <nav class="primary-nav" id="primary-nav" aria-label="주 메뉴">
+        <ul role="list">
+          {%- for item in ko.NAV_ITEMS %}
+          <li><a href="{{ url_for(item.endpoint) }}" class="primary-nav__link"{% if section == item.section %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
+          {%- endfor %}
+        </ul>
+      </nav>
+
+      <div class="site-header__tools">
+        {#- 검수자 선택: DB 과목에서 구현. 지금은 비활성 + 이유 툴팁 -#}
+        <div class="reviewer tip-host" tabindex="0" aria-describedby="reviewer-why">
+          <label class="visually-hidden" for="reviewer-select">{{ ko.UI.reviewer }}</label>
+          <span class="select select--compact">
+            <select id="reviewer-select" name="reviewer" disabled aria-describedby="reviewer-why">
+              <option>{{ ko.UI.reviewer_placeholder }}</option>
+            </select>
+          </span>
+          <span class="tip tip--bottom tip--end" role="tooltip" id="reviewer-why">{{ ko.UI.reviewer_disabled }}</span>
+        </div>
+
+        <button type="button" class="btn btn--ghost btn--icon" data-shortcuts-open aria-haspopup="dialog" aria-label="{{ ko.UI.shortcuts_open }}" title="{{ ko.UI.shortcuts }} (?)">{{ icon("keyboard", 18) }}</button>
+
+        <button type="button" class="btn btn--ghost btn--icon theme-toggle" data-theme-toggle
+                aria-label="{{ ko.UI.theme_to_dark }}" title="{{ ko.UI.theme_to_dark }}"
+                data-label-dark="{{ ko.UI.theme_to_dark }}" data-label-light="{{ ko.UI.theme_to_light }}">
+          <span class="theme-toggle__moon">{{ icon("moon", 18) }}</span>
+          <span class="theme-toggle__sun">{{ icon("sun", 18) }}</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="{% block main_class %}page{% endblock %}" tabindex="-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="site-footer__inner">
+      <p class="site-footer__license">
+        데이터 출처 <a href="https://www.cvlibs.net/datasets/kitti/" rel="noopener">KITTI Vision Benchmark Suite</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="license noopener">CC BY-NC-SA 3.0</a>
+      </p>
+      <p class="site-footer__meta">
+        <a href="{{ url_for('pages.about') }}">용어 정의 · 출처</a>
+        <span aria-hidden="true">·</span>
+        <button type="button" class="link-quiet" data-shortcuts-open aria-haspopup="dialog">단축키 <kbd>?</kbd></button>
+      </p>
+    </div>
+  </footer>
+
+  {#- 단축키 도움말: 네이티브 <dialog> (포커스 가두기·Esc 닫기 내장) -#}
+  <dialog class="dialog" id="shortcuts-dialog" aria-labelledby="shortcuts-title">
+    <div class="dialog__head">
+      <h2 class="dialog__title" id="shortcuts-title">{{ ko.UI.shortcuts }}</h2>
+      <form method="dialog"><button class="btn btn--ghost btn--icon" aria-label="{{ ko.UI.close }}">{{ icon("x", 18) }}</button></form>
+    </div>
+    <dl class="kbd-list">
+      {%- for keys, desc in ko.SHORTCUTS %}
+      <div class="kbd-list__row"><dt>{% for k in keys.split("  ") %}<kbd>{{ k }}</kbd>{% endfor %}</dt><dd>{{ desc }}</dd></div>
+      {%- endfor %}
+    </dl>
+    <p class="dialog__foot">입력 칸에 글자를 쓰는 중에는 단축키가 동작하지 않습니다.</p>
+  </dialog>
+
+  {{ toast_region() }}
+
+  <script src="{{ url_for('static', filename='js/app.js') }}?v={{ asset_v }}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

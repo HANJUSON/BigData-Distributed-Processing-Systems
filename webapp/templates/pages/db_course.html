@@ -1,0 +1,40 @@
+{#- S3·S4 공통: 데이터베이스 과목 프로젝트에서 구현하는 화면의 안내 페이지 -#}
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/badges.html" import badge %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="page-head__eyebrow">{% block eyebrow %}{% endblock %} · 데이터베이스 과목</p>
+    <h1>{% block heading %}{% endblock %}</h1>
+    <p class="page-head__q">{% block question %}{% endblock %}</p>
+  </div>
+  {{ badge("DB 과목에서 구현", "accent", "◇") }}
+</div>
+
+<div class="handoff">
+  <div class="handoff__card">
+    <div class="handoff__icon" aria-hidden="true">{{ icon("database", 22) }}</div>
+    <h2>{{ ko.UI.db_course_notice }}</h2>
+    <p>이 화면은 빅데이터 과목과 데이터베이스 과목이 함께 쓰는 웹 앱의 일부입니다. 화면의 모든 숫자는 MySQL의 저장 프로시저·뷰에서 오며, 빅데이터 과목 저장소에서는 메뉴와 디자인 규칙만 공유합니다.</p>
+    <ul class="handoff__list" role="list">
+      {% block features %}{% endblock %}
+    </ul>
+    <div class="handoff__meta">
+      {% block meta %}{% endblock %}
+    </div>
+  </div>
+
+  <div class="stack">
+    <div class="preview" aria-hidden="true">
+      <span class="preview__label">화면 미리보기 (와이어프레임)</span>
+      {% block preview %}{% endblock %}
+    </div>
+    <div class="btn-row">
+      <a class="btn btn--primary" href="{{ url_for('pages.search') }}">{{ icon("search") }}<span>장면 검색으로 가기</span></a>
+      <a class="btn btn--secondary" href="{{ url_for('pages.pipeline') }}"><span>처리 결과 보기</span></a>
+    </div>
+  </div>
+</div>
+{% endblock %}

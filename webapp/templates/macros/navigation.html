@@ -1,0 +1,27 @@
+{#- 페이지 이동: 번호 매김 (S1 ‘‹ 이전 1 2 3 … 54 다음 ›’) -#}
+{% from "macros/icons.html" import icon %}
+
+{#- href_for: 페이지 번호 → URL 을 만드는 함수 -#}
+{% macro pagination(page, pages, href_for) -%}
+{%- set window = [1, 2, 3] + [page - 1, page, page + 1] + [pages] -%}
+<nav class="pager" aria-label="결과 페이지">
+  {%- if page > 1 %}
+  <a class="pager__step" href="{{ href_for(page - 1) }}" rel="prev">{{ icon("chevron-left") }}<span>{{ ko.UI.prev }}</span></a>
+  {%- else %}
+  <span class="pager__step is-disabled" aria-disabled="true">{{ icon("chevron-left") }}<span>{{ ko.UI.prev }}</span></span>
+  {%- endif %}
+  <ol class="pager__pages" role="list">
+    {%- set ns = namespace(last=0) %}
+    {%- for n in range(1, pages + 1) if n in window %}
+      {%- if n - ns.last > 1 %}<li class="pager__gap" aria-hidden="true">…</li>{% endif %}
+      <li>{% if n == page %}<a class="pager__num is-current" href="{{ href_for(n) }}" aria-current="page">{{ n }}</a>{% else %}<a class="pager__num" href="{{ href_for(n) }}">{{ n }}</a>{% endif %}</li>
+      {%- set ns.last = n %}
+    {%- endfor %}
+  </ol>
+  {%- if page < pages %}
+  <a class="pager__step" href="{{ href_for(page + 1) }}" rel="next"><span>{{ ko.UI.next }}</span>{{ icon("chevron-right") }}</a>
+  {%- else %}
+  <span class="pager__step is-disabled" aria-disabled="true"><span>{{ ko.UI.next }}</span>{{ icon("chevron-right") }}</span>
+  {%- endif %}
+</nav>
+{%- endmacro %}

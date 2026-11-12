@@ -1,0 +1,29 @@
+{#-
+  적용 조건 칩 (9.4). × 는 그 조건만 뺀 URL로 가는 링크다.
+  JS가 켜져 있으면 결과 영역만 다시 그리도록 가로챈다(이후 단계).
+-#}
+{% from "macros/icons.html" import icon %}
+
+{% macro chip(label, href=None, slug=None, warn=False) -%}
+<span class="chip{% if warn %} chip--warn{% endif %}">
+  {%- if slug %}<span class="cls-dot cls-dot--{{ slug }}" aria-hidden="true"></span>{% endif %}
+  {%- if warn %}<span aria-hidden="true">⚠</span>{% endif %}
+  <span class="chip__label">{{ label }}</span>
+  {%- if href %}
+  <a class="chip__remove" href="{{ href }}" aria-label="{{ ko.UI.remove_condition.format(label=label) }}" data-chip-remove>{{ icon("x", 14) }}</a>
+  {%- endif %}
+</span>
+{%- endmacro %}
+
+{% macro chip_list(chips, clear_href=None) -%}
+<div class="chips" aria-label="적용된 검색 조건">
+  {%- if chips %}
+  <ul class="chips__list" role="list">
+    {%- for c in chips %}<li>{{ chip(c.label, c.href, c.slug, c.warn) }}</li>{% endfor %}
+  </ul>
+  {%- if clear_href %}<a class="link-quiet chips__clear" href="{{ clear_href }}">{{ ko.UI.clear_all }}</a>{% endif %}
+  {%- else %}
+  <span class="chips__none">전체 장면 · 조건 없음</span>
+  {%- endif %}
+</div>
+{%- endmacro %}

@@ -1,0 +1,217 @@
+/*
+ * KITTI Scene Explorer — design tokens (README 9.6)
+ *
+ * The ONLY file in the app that may contain literal colour values.
+ * Everything else (app.css, templates, JS) reads these via var(--…).
+ *
+ * Theme resolution
+ *   1. :root                       → light (default)
+ *   2. prefers-color-scheme: dark  → dark, unless <html data-theme="light">
+ *   3. [data-theme="dark"|"light"] → explicit override (header toggle,
+ *      persisted in localStorage). Works on any subtree, which is how the
+ *      component gallery renders both themes side by side.
+ *   4. --viz-* tokens are dark in BOTH themes (S2 visualisation area).
+ */
+
+/* ------------------------------------------------------------------ */
+/* Theme-independent tokens                                            */
+/* ------------------------------------------------------------------ */
+:root {
+  /* Type — six sizes only (9.6) */
+  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --fs-12: 12px;
+  --fs-14: 14px; /* body */
+  --fs-16: 16px;
+  --fs-20: 20px;
+  --fs-24: 24px;
+  --fs-32: 32px;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --lh-tight: 1.25;
+  --lh-body: 1.55;
+
+  /* Space — 4 px grid only (4·8·12·16·24·32·48) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Shape */
+  --radius: 6px;
+  --radius-pill: 999px;
+  --border-w: 1px;
+  --focus-w: 2px;
+
+  /* Layout */
+  --header-h: 56px;
+  --content-max: 1440px;
+  --panel-w: 280px;
+  --thumb-w: 320px;
+  --control-h: 36px;
+  --control-h-sm: 28px;
+
+  /* Motion */
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Object class colours — Okabe–Ito (9.6). Identical in both themes. */
+  --cls-car: #0072B2;
+  --cls-van: #56B4E9;
+  --cls-truck: #E69F00;
+  --cls-pedestrian: #D55E00;
+  --cls-person-sitting: #F0E442;
+  --cls-cyclist: #009E73;
+  --cls-tram: #CC79A7;
+  --cls-misc: #8C8C8C;
+  --cls-dontcare: #8C8C8C; /* rendered as grey hatching */
+
+  /* Text drawn ON a class colour (number tags on boxes). ≥ 4.5:1 each. */
+  --cls-ink-light: #FFFFFF;
+  --cls-ink-dark: #0F1115;
+  --cls-car-ink: var(--cls-ink-light);
+  --cls-van-ink: var(--cls-ink-dark);
+  --cls-truck-ink: var(--cls-ink-dark);
+  --cls-pedestrian-ink: var(--cls-ink-dark);
+  --cls-person-sitting-ink: var(--cls-ink-dark);
+  --cls-cyclist-ink: var(--cls-ink-dark);
+  --cls-tram-ink: var(--cls-ink-dark);
+  --cls-misc-ink: var(--cls-ink-dark);
+  --cls-dontcare-ink: var(--cls-ink-dark);
+
+  /* Visualisation well — dark in BOTH themes (9.6) */
+  --viz-bg: #0F1115;
+  --viz-surface: #171A21;
+  --viz-border: #2A2F3A;
+  --viz-text: #E8EAEE;
+  --viz-text-muted: #9AA3B2;
+  --viz-grid: #2A2F3A;
+  --viz-grid-strong: #3A4150;
+  --viz-control-border: #6B7385; /* form control boundary on the dark well, ≥ 3:1 (WCAG 1.4.11) */
+  --viz-sensor: #E8EAEE;
+  --viz-accent: #6E9BFF;
+  --viz-accent-soft: #1C2A4A;
+  --viz-surface-hover: #222733;
+  --viz-warn: #F0A63A;
+  --viz-warn-soft: #2E2416;
+  --viz-scrim: rgba(15, 17, 21, 0.72);
+
+  /* Sequential colour map — viridis stops (9.7). Never rainbow. */
+  --viridis-0: #440154;
+  --viridis-1: #3B528B;
+  --viridis-2: #21918C;
+  --viridis-3: #5EC962;
+  --viridis-4: #FDE725;
+}
+
+/* ------------------------------------------------------------------ */
+/* Light theme (default)                                               */
+/* ------------------------------------------------------------------ */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #FFFFFF;
+  --surface: #F6F7F9;
+  --surface-raised: #FFFFFF;
+  --surface-hover: #EEF0F3;
+  --border: #E3E6EB;
+  --border-strong: #C9CED6;
+  --control-border: #808998;  /* checkbox·switch·input·select boundary, ≥ 3:1 on bg/surface/hover (WCAG 1.4.11) */
+  --text: #14171F;
+  --text-muted: #5B6372;
+  --accent: #2457D6;
+  --accent-hover: #1C47B3;
+  --accent-ink: #FFFFFF;      /* text on --accent */
+  --accent-soft: #E9EFFC;     /* selected / active tint */
+  --warn: #9E5300;
+  --warn-soft: #FBF1E4;
+  --danger: #C62828;
+  --danger-hover: #A82020;
+  --danger-ink: #FFFFFF;
+  --danger-soft: #FCECEC;
+  --ok: #1E7F4F;
+  --ok-soft: #EEF8F2;
+  --cls-outline: #14171F;     /* extra outline for light class colours (Person_sitting) */
+  --skeleton-base: #EEF0F3;
+  --skeleton-shine: #F8F9FB;
+  --scrim: rgba(15, 17, 21, 0.48);
+  --shadow-1: 0 1px 2px rgba(20, 23, 31, 0.06), 0 1px 3px rgba(20, 23, 31, 0.08);
+  --shadow-pop: 0 8px 24px rgba(20, 23, 31, 0.16);
+}
+
+/* ------------------------------------------------------------------ */
+/* Dark theme — system preference (unless explicitly light)            */
+/* ------------------------------------------------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0F1115;
+    --surface: #171A21;
+    --surface-raised: #1C2029;
+    --surface-hover: #222733;
+    --border: #2A2F3A;
+    --border-strong: #3A4150;
+    --control-border: #6B7385;
+    --text: #E8EAEE;
+    --text-muted: #9AA3B2;
+    --accent: #6E9BFF;
+    --accent-hover: #8FB2FF;
+    --accent-ink: #0F1115;
+    --accent-soft: #1C2A4A;
+    --warn: #F0A63A;
+    --warn-soft: #2E2416;
+    --danger: #FF6B6B;
+    --danger-hover: #FF8A8A;
+    --danger-ink: #0F1115;
+    --danger-soft: #331B1E;
+    --ok: #4CC38A;
+    --ok-soft: #15291F;
+    --cls-outline: transparent;
+    --skeleton-base: #1C2029;
+    --skeleton-shine: #262B36;
+    --scrim: rgba(0, 0, 0, 0.6);
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Dark theme — explicit override (header toggle or scoped subtree)    */
+/* ------------------------------------------------------------------ */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0F1115;
+  --surface: #171A21;
+  --surface-raised: #1C2029;
+  --surface-hover: #222733;
+  --border: #2A2F3A;
+  --border-strong: #3A4150;
+  --control-border: #6B7385;
+  --text: #E8EAEE;
+  --text-muted: #9AA3B2;
+  --accent: #6E9BFF;
+  --accent-hover: #8FB2FF;
+  --accent-ink: #0F1115;
+  --accent-soft: #1C2A4A;
+  --warn: #F0A63A;
+  --warn-soft: #2E2416;
+  --danger: #FF6B6B;
+  --danger-hover: #FF8A8A;
+  --danger-ink: #0F1115;
+  --danger-soft: #331B1E;
+  --ok: #4CC38A;
+  --ok-soft: #15291F;
+  --cls-outline: transparent;
+  --skeleton-base: #1C2029;
+  --skeleton-shine: #262B36;
+  --scrim: rgba(0, 0, 0, 0.6);
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.5);
+}

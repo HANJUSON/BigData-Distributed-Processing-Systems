@@ -1,0 +1,457 @@
+{
+  "generated_at": "2026-11-05T05:48:48+00:00",
+  "csv_dir": "~/data/kitti/work/mysql_csv",
+  "expected_file": "~/data/kitti/work/mysql_csv/expected.json",
+  "sql_files": [
+    "01_schema.sql",
+    "02_load.sql",
+    "03_views_procs.sql",
+    "04_checks.sql"
+  ],
+  "summary": {
+    "n_checks": 62,
+    "n_ok": 62,
+    "n_failed": 0,
+    "passed": true
+  },
+  "checks": [
+    {
+      "section": "row_count",
+      "item": "analysis_threshold",
+      "expected": 8,
+      "actual": 8,
+      "status": "ok"
+    },
+    {
+      "section": "row_count",
+      "item": "frame",
+      "expected": 7481,
+      "actual": 7481,
+      "status": "ok"
+    },
+    {
+      "section": "row_count",
+      "item": "gt_object",
+      "expected": 51865,
+      "actual": 51865,
+      "status": "ok"
+    },
+    {
+      "section": "row_count",
+      "item": "object_class",
+      "expected": 9,
+      "actual": 9,
+      "status": "ok"
+    },
+    {
+      "section": "row_count",
+      "item": "object_feature",
+      "expected": 40570,
+      "actual": 40570,
+      "status": "ok"
+    },
+    {
+      "section": "row_count",
+      "item": "stg_frame",
+      "expected": 7481,
+      "actual": 7481,
+      "status": "ok"
+    },
+    {
+      "section": "row_count",
+      "item": "stg_gt_object",
+      "expected": 51865,
+      "actual": 51865,
+      "status": "ok"
+    },
+    {
+      "section": "row_count",
+      "item": "stg_object_feature",
+      "expected": 40570,
+      "actual": 40570,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "frame.image_h",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "frame.image_w",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "frame.n_points",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.alpha",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.bbox_bottom",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.bbox_h",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.bbox_left",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.bbox_right",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.bbox_top",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.diff_level",
+      "expected": 20514,
+      "actual": 20514,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.dim_h",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.dim_l",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.dim_w",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.dist_m",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.loc_x",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.loc_y",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.loc_z",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.occluded",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.rotation_y",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.truncated",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "gt_object.valid_3d",
+      "expected": 11295,
+      "actual": 11295,
+      "status": "ok"
+    },
+    {
+      "section": "null_count",
+      "item": "object_feature.points_in_box",
+      "expected": 8,
+      "actual": 8,
+      "status": "ok"
+    },
+    {
+      "section": "threshold",
+      "item": "Car",
+      "expected": 11,
+      "actual": 11,
+      "status": "ok"
+    },
+    {
+      "section": "threshold",
+      "item": "Cyclist",
+      "expected": 14,
+      "actual": 14,
+      "status": "ok"
+    },
+    {
+      "section": "threshold",
+      "item": "Misc",
+      "expected": 25,
+      "actual": 25,
+      "status": "ok"
+    },
+    {
+      "section": "threshold",
+      "item": "Pedestrian",
+      "expected": 19,
+      "actual": 19,
+      "status": "ok"
+    },
+    {
+      "section": "threshold",
+      "item": "Person_sitting",
+      "expected": 37,
+      "actual": 37,
+      "status": "ok"
+    },
+    {
+      "section": "threshold",
+      "item": "Tram",
+      "expected": 3,
+      "actual": 3,
+      "status": "ok"
+    },
+    {
+      "section": "threshold",
+      "item": "Truck",
+      "expected": 49,
+      "actual": 49,
+      "status": "ok"
+    },
+    {
+      "section": "threshold",
+      "item": "Van",
+      "expected": 20,
+      "actual": 20,
+      "status": "ok"
+    },
+    {
+      "section": "threshold_n",
+      "item": "Car",
+      "expected": 28741,
+      "actual": 28741,
+      "status": "ok"
+    },
+    {
+      "section": "threshold_n",
+      "item": "Cyclist",
+      "expected": 1627,
+      "actual": 1627,
+      "status": "ok"
+    },
+    {
+      "section": "threshold_n",
+      "item": "Misc",
+      "expected": 972,
+      "actual": 972,
+      "status": "ok"
+    },
+    {
+      "section": "threshold_n",
+      "item": "Pedestrian",
+      "expected": 4487,
+      "actual": 4487,
+      "status": "ok"
+    },
+    {
+      "section": "threshold_n",
+      "item": "Person_sitting",
+      "expected": 222,
+      "actual": 222,
+      "status": "ok"
+    },
+    {
+      "section": "threshold_n",
+      "item": "Tram",
+      "expected": 510,
+      "actual": 510,
+      "status": "ok"
+    },
+    {
+      "section": "threshold_n",
+      "item": "Truck",
+      "expected": 1091,
+      "actual": 1091,
+      "status": "ok"
+    },
+    {
+      "section": "threshold_n",
+      "item": "Van",
+      "expected": 2912,
+      "actual": 2912,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "diff_level_mismatch",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "dist_bin_mismatch",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "dist_m_mismatch",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "dist_m_null_mismatch",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "dontcare_feature",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "eligible_easy_vs_diff_level",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "eligible_hard_vs_diff_level",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "eligible_moderate_vs_diff_level",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "invalid_but_value",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "missing_feature",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "points_in_box_mismatch",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "stg_gt_object_not_loaded",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "stg_object_feature_not_loaded",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "stg_unmapped_class",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "valid_3d_mismatch",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    },
+    {
+      "section": "contradiction",
+      "item": "valid_but_null",
+      "expected": 0,
+      "actual": 0,
+      "status": "ok"
+    }
+  ],
+  "info": {
+    "dist_m_exact_mismatch": "0",
+    "dist_m_max_abs_diff": "0"
+  }
+}

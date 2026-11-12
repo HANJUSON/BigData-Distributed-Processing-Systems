@@ -1,0 +1,52 @@
+{#-
+  결과 카드 (S1, 9.4): 썸네일 · frame_id · 일치 객체 수 · 최근접 거리 · 관측 부족·검수 배지.
+  실제 썸네일은 배치가 만든 thumbs/<frame_id>.webp(폭 320 px, 박스를 미리 그림)를
+  loading="lazy"로 불러온다. 데모 모드(KITTI_DEMO)에서는 같은 비율의 SVG로 박스만 그린다.
+  card: frame_id · match_objects · match_classes(일치 객체의 클래스) · nearest_m(정렬이 ‘거리 먼 순’이면 farthest_m) · low_obs(장면의
+  관측 부족 객체 수) · n_objects · review_status(None이면 배지 없음). 값은 모두 MySQL 프로시저 결과다.
+-#}
+{% from "macros/badges.html" import low_obs, review_status, cls_tag %}
+
+{#- 정답 박스만 그린 데모 썸네일 (1242×375 좌표계) -#}
+{% macro scene_thumb(objects, match_class=None, label="") -%}
+<svg class="thumb" viewBox="0 0 1242 375" preserveAspectRatio="xMidYMid slice" role="img" aria-label="{{ label }}">
+  <rect class="thumb__bg" width="1242" height="375"/>
+  <path class="thumb__guide" d="M0 230 L1242 230 M621 182 L80 375 M621 182 L1162 375 M621 182 L390 375 M621 182 L852 375"/>
+  {%- for o in objects if o.cls != "DontCare" %}
+  {%- set b = o.bbox %}
+  <rect class="thumb__box box--{{ o.cls|cls_slug }}{% if match_class and o.cls != match_class %} is-dim{% endif %}" x="{{ b[0] }}" y="{{ b[1] }}" width="{{ (b[2] - b[0])|round(1) }}" height="{{ (b[3] - b[1])|round(1) }}"/>
+  {%- endfor %}
+</svg>
+{%- endmacro %}
+
+{% macro result_card(card, href, thumb_src=None, demo=False) -%}
+{%- set fid = card.frame_id|frame -%}
+{%- set classes = card.match_classes or [] -%}
+<article class="rcard">
+  <div class="rcard__media">
+    {%- if thumb_src %}
+    <img src="{{ thumb_src }}" width="320" height="97" loading="lazy" decoding="async" alt="장면 {{ fid }} 썸네일, 정답 객체 {{ card.n_objects }}개">
+    {%- else %}
+    {{ scene_thumb(card.objects, classes[0] if classes|length == 1 else None, "장면 " ~ fid ~ " 썸네일, 정답 객체 " ~ card.n_objects ~ "개") }}
+    {%- endif %}
+    {%- if demo %}<span class="rcard__demo">데모</span>{% endif %}
+  </div>
+  <div class="rcard__body">
+    <h3 class="rcard__title"><a class="rcard__link" href="{{ href }}"><span class="visually-hidden">장면 </span><span class="mono">{{ fid }}</span></a></h3>
+    <p class="rcard__meta">
+      {%- for c in classes %}{{ cls_tag(c, False) }}{% endfor %}
+      <span>{% if classes %}{{ classes|map("cls_label")|join(" · ") }}{% else %}일치 객체{% endif %} <span class="num">{{ card.match_objects }}</span></span>
+      <span class="rcard__sep" aria-hidden="true">·</span>
+      {%- if card.show_far %}
+      <span title="일치 객체 중 가장 먼 거리"><span class="visually-hidden">가장 먼 거리 </span><span class="num">{{ card.farthest_m|dist }}</span></span>
+      {%- else %}
+      <span title="일치 객체 중 최근접 거리"><span class="visually-hidden">최근접 거리 </span><span class="num">{{ card.nearest_m|dist }}</span></span>
+      {%- endif %}
+    </p>
+    <p class="rcard__badges">
+      {%- if card.low_obs %}{{ low_obs(card.low_obs) }}{% endif %}
+      {%- if card.review_status %}{{ review_status(card.review_status) }}{% endif %}
+    </p>
+  </div>
+</article>
+{%- endmacro %}

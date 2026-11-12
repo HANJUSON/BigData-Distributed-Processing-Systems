@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S5 처리 결과 · 와이어프레임</title>
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <h1>S5 처리 결과 <span class="mono muted">/pipeline</span></h1>
+    <span class="meta">질문: “데이터와 처리는 믿을 만한가?” · 소속 <b>빅데이터 과목</b>(F-2, F-6, F-7, F-9, F-11 ~ F-14) · 데이터 배치가 저장한 결과 파일(JSON·CSV·PNG) · <a href="README.md">목록</a></span>
+  </header>
+  <div class="layout">
+    <div>
+      <div class="frame">
+        <div class="wf-header">
+          <span class="wf-brand">KITTI Scene Explorer</span>
+          <nav class="wf-nav"><span>장면 검색</span><span>검수</span><span>분석</span><span class="on">처리 결과</span><span>정보</span></nav>
+          <div class="wf-tools"><span class="btn off">검수자 ▾</span><span class="btn ghost">⌨</span><span class="btn ghost">◐</span></div>
+        </div>
+        <div style="padding:24px;">
+          <div class="label" style="margin-top:0">S5 · 빅데이터 과목</div>
+          <b style="font-size:20px">처리 결과</b>
+          <p class="muted" style="margin:2px 0 16px">데이터와 처리는 믿을 만한가?</p>
+          <div class="row" style="border-bottom:1px solid var(--line);gap:24px;padding-bottom:8px;position:relative;">
+            <span class="m inline">1</span><span>데이터 품질</span><span>분포</span><span>공간 히트맵</span><span>관측 부족</span><b style="text-decoration:underline;text-underline-offset:12px;text-decoration-thickness:2px">정확성·성능</b>
+          </div>
+          <div class="box fill" style="margin:16px 0;padding:16px;position:relative;">
+            <span class="m" style="left:-10px;top:-10px;">2</span>
+            <div class="row"><span class="muted" style="font-size:11px;font-weight:700">한 줄 결론</span><b style="font-size:18px">“Spark와 순차 처리 결과 모든 항목 일치, 7,481개 장면에서 local[8]이 순차 대비 N배”</b></div>
+            <div class="muted" style="font-size:11px;margin-top:4px">출처: perf_runs.csv · 생성 일시</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="box" style="position:relative;">
+              <span class="m" style="left:-10px;top:-10px;">3</span>
+              <div class="row" style="justify-content:space-between"><b>속도 향상 (순차 대비 배수)</b><span class="btn ghost">표로 보기</span></div>
+              <svg viewBox="0 0 300 160" style="width:100%;height:auto;margin-top:8px" aria-hidden="true">
+                <line x1="30" y1="140" x2="290" y2="140" stroke="#6b7280"/><line x1="30" y1="10" x2="30" y2="140" stroke="#6b7280"/>
+                <line x1="40" y1="130" x2="280" y2="20" stroke="#6b7280" stroke-dasharray="5 5"/>
+                <g stroke="#1c1f26"><line x1="40" y1="122" x2="40" y2="134"/><line x1="140" y1="88" x2="140" y2="104"/><line x1="270" y1="66" x2="270" y2="84"/></g>
+                <circle cx="40" cy="128" r="4"/><circle cx="140" cy="96" r="4"/><circle cx="270" cy="75" r="4"/>
+                <text x="36" y="155" font-size="9">local[1]</text><text x="128" y="155" font-size="9">local[4]</text><text x="256" y="155" font-size="9">local[8]</text>
+              </svg>
+              <div class="muted" style="font-size:11px">점 = 3회 중앙값, 막대 = 최소–최대, 점선 = 이상적 선형 · 출처 perf_runs.csv</div>
+            </div>
+            <div class="box">
+              <b>Spark ↔ 순차 처리 대조 (F-11)</b>
+              <table class="wf" style="margin-top:8px"><tr><th>항목</th><th>기준</th><th>결과</th></tr>
+                <tr><td>키·중복·NULL 위치</td><td>완전 일치</td><td>✓ 통과</td></tr>
+                <tr><td>객체 수·격자 포인트</td><td>정수 오차 0</td><td>✓ 통과</td></tr>
+                <tr><td>거리·평균</td><td class="mono">≤1e-6+1e-6|b|</td><td>✓ 통과</td></tr></table>
+            </div>
+            <div class="box"><b>규모 × 실행 방식 처리 시간</b><div class="fill" style="height:80px;margin-top:8px;border-radius:4px"></div></div>
+            <div class="box"><b>메모리 peak · 측정 환경</b><div class="line" style="margin-top:10px"></div><div class="line" style="margin-top:6px;width:70%"></div></div>
+          </div>
+          <div class="row" style="margin-top:20px;border-top:1px solid var(--line);padding-top:12px;position:relative;"><span class="m inline">4</span><span class="muted">원본 파일</span><span class="btn">⤓ perf_runs.csv</span><span class="btn">⤓ perf_memory_timeseries.csv</span><span class="btn">⤓ environment.json</span></div>
+        </div>
+        <div class="wf-footer"><span>데이터 출처 KITTI Vision Benchmark Suite · CC BY-NC-SA 3.0</span><span>용어 정의 · 출처 · 단축키 ?</span></div>
+      </div>
+    </div>
+    <aside class="notes">
+      <h2>주석</h2>
+      <ol>
+        <li><span class="m inline">1</span><span>탭 5개(ARIA tabs, <kbd>←</kbd>·<kbd>→</kbd>·Home·End). 선택 탭은 URL 해시(<span class="mono">#perf</span>)로 공유.</span></li>
+        <li><span class="m inline">2</span><span>각 탭 맨 위 <b>한 줄 결론</b>. 숫자는 결과 파일에서 채움(예시는 자리표시).</span></li>
+        <li><span class="m inline">3</span><span>그래프: 제목·축 이름·단위·출처, 툴팁으로 정확한 값, ‘표로 보기’ 전환. Chart.js 하나, 범주는 클래스 색, 연속값 viridis, 히트맵은 로그 척도(범례 명시).</span></li>
+        <li><span class="m inline">4</span><span>맨 아래 원본 파일 다운로드.</span></li>
+      </ol>
+      <dl class="states">
+        <dt>탭별 내용</dt><dd>데이터 품질(검사 항목 표, DontCare 분리, 용량·총 포인트) · 분포(클래스 × 거리, 가림 누적, 난이도 비율) · 공간 히트맵(전체 누적 PNG, 표본 장면) · 관측 부족(분포+기준선, 목록 → S1) · 정확성·성능.</dd>
+        <dt>빈 결과</dt><dd>결과 파일 없음: “결과 파일이 아직 없습니다(파일명). 배치 실행 후 표시됩니다.”</dd>
+        <dt>오류</dt><dd>파일 해석 실패: 파일명과 원인을 ‘자세히’에.</dd>
+        <dt>부분 성공</dt><dd>탭·카드 단위로 실패만 표시.</dd>
+      </dl>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

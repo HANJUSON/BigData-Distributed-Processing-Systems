@@ -1,0 +1,30 @@
+{
+  "criterion": "N-4: all modes x scales x reps runs exit 0, all pass F-11 verify against the same-scale sequential reference, sampled process-tree peak RSS <= 80% of physical RAM",
+  "expected_runs": 36,
+  "recorded_runs": 36,
+  "runs_exit0": 36,
+  "runs_verify_pass": 36,
+  "ram_total_mib": 30755.8,
+  "budget_mib": 24604.6,
+  "max_peak_rss_mib": 6817.7,
+  "excluded": [
+    {
+      "mode": "local8",
+      "scale": 100,
+      "reason": "warm-up run, excluded from results by design"
+    },
+    {
+      "mode": "local8",
+      "scale": 1000,
+      "reason": "warm-up run, excluded from results by design"
+    },
+    {
+      "mode": "local8",
+      "scale": 7481,
+      "reason": "warm-up run, excluded from results by design"
+    }
+  ],
+  "scope_note": "This verdict covers scales up to the largest scale measured (7,481 frames in the full run).",
+  "pass": true,
+  "reasons": []
+}

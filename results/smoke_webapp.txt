@@ -1,0 +1,137 @@
+MySQL 연결: ~/.my.cnf · analysis_threshold 8행
+원본: ~/data/kitti/training · 썸네일: ~/data/kitti/work/thumbs · 결과: <project>/results
+
+== S1 장면 검색: 화면 ↔ CALL sp_search_scenes_ex (U-4)
+- 기본 (전체, 가림 0–2): CALL sp_search_scenes_ex(None, None, None, None, None, None, 0, 0, 'match', 24, 0)
+  [PASS] HTTP 200 (200)
+  [PASS] 카드 24개의 장면·일치 객체 수·순서가 CALL 결과와 같음 (앞 3개 화면 [(4139, 22), (4747, 20), (5663, 20)] / CALL [(4139, 22), (4747, 20), (5663, 20)])
+  [PASS] 결과 수 ‘장면 7,480개’ = CALL 전체 행 수 7,480
+  [PASS] ‘객체 38,364개’ = CALL matched_objects 합
+  [PASS] 첫 카드 링크에 검색 조건과 순번 i=1
+  [PASS] S2 위치 표시 (1 / 7,480)
+- T1: 30 m 이상 · 일부 가림 · 보행자: CALL sp_search_scenes_ex('[4]', 30, None, '[1]', None, None, 0, 0, 'match', 24, 0)
+  [PASS] HTTP 200 (200)
+  [PASS] 카드 24개의 장면·일치 객체 수·순서가 CALL 결과와 같음 (앞 3개 화면 [(1611, 4), (1958, 4), (2904, 4)] / CALL [(1611, 4), (1958, 4), (2904, 4)])
+  [PASS] 결과 수 ‘장면 140개’ = CALL 전체 행 수 140
+  [PASS] ‘객체 203개’ = CALL matched_objects 합
+  [PASS] T1 독립 SQL(gt_object·object_feature, √(x²+z²) ≥ 30, occluded = 1): 장면 140 · 객체 203 = 화면
+  [PASS] 첫 카드 링크에 검색 조건과 순번 i=1
+  [PASS] S2 위치 표시 (1 / 140)
+- 보행자+자전거 · 10–40 m · 가림 {0,2} · 관측 부족만 · 2쪽: CALL sp_search_scenes_ex('[4, 6]', 10, 40, '[0, 2]', None, None, 1, 0, 'match', 24, 24)
+  [PASS] HTTP 200 (200)
+  [PASS] 카드 24개의 장면·일치 객체 수·순서가 CALL 결과와 같음 (앞 3개 화면 [(6198, 2), (6752, 2), (7182, 2)] / CALL [(6198, 2), (6752, 2), (7182, 2)])
+  [PASS] 결과 수 ‘장면 185개’ = CALL 전체 행 수 185
+  [PASS] ‘객체 218개’ = CALL matched_objects 합
+  [PASS] 첫 카드 링크에 검색 조건과 순번 i=25
+  [PASS] S2 위치 표시 (25 / 185)
+- 차량 · 포인트 20–200 · 가림 0–3 · 미검수만: CALL sp_search_scenes_ex('[1]', None, None, '[0, 1, 2, 3]', 20, 200, 0, 1, 'match', 24, 0)
+  [PASS] HTTP 200 (200)
+  [PASS] 카드 24개의 장면·일치 객체 수·순서가 CALL 결과와 같음 (앞 3개 화면 [(7458, 12), (590, 11), (2872, 11)] / CALL [(7458, 12), (590, 11), (2872, 11)])
+  [PASS] 결과 수 ‘장면 5,332개’ = CALL 전체 행 수 5,332
+  [PASS] ‘객체 12,965개’ = CALL matched_objects 합
+  [PASS] 첫 카드 링크에 검색 조건과 순번 i=1
+  [PASS] S2 위치 표시 (1 / 5,332)
+
+== S1 정렬 4가지: 화면 순서 = CALL 순서 (보행자 · 10 m 이상)
+  [PASS] sort=match 1쪽: 화면 [6583, 4139, 874, 2707, 2742]… = CALL [6583, 4139, 874, 2707, 2742]…
+  [PASS] sort=match 2쪽: 화면 [384, 1355, 1672, 2663, 4740]… = CALL [384, 1355, 1672, 2663, 4740]…
+  [PASS] sort=match: 전체 1,317행이 정렬 키 순서(동점은 frame_id)
+  [PASS] sort=match: 정렬만 다르고 장면 집합은 같음
+  [PASS] sort=far 1쪽: 화면 [7156, 6814, 6744, 5110, 2933]… = CALL [7156, 6814, 6744, 5110, 2933]…
+  [PASS] sort=far 2쪽: 화면 [2245, 5517, 5061, 124, 6449]… = CALL [2245, 5517, 5061, 124, 6449]…
+  [PASS] sort=far: 전체 1,317행이 정렬 키 순서(동점은 frame_id)
+  [PASS] sort=far: 정렬만 다르고 장면 집합은 같음
+  [PASS] sort=few_points 1쪽: 화면 [275, 462, 638, 1262, 1958]… = CALL [275, 462, 638, 1262, 1958]…
+  [PASS] sort=few_points 2쪽: 화면 [5391, 6293, 6422, 317, 499]… = CALL [5391, 6293, 6422, 317, 499]…
+  [PASS] sort=few_points: 전체 1,317행이 정렬 키 순서(동점은 frame_id)
+  [PASS] sort=few_points: 정렬만 다르고 장면 집합은 같음
+  [PASS] sort=frame 1쪽: 화면 [5, 10, 11, 15, 35]… = CALL [5, 10, 11, 15, 35]…
+  [PASS] sort=frame 2쪽: 화면 [146, 147, 149, 151, 153]… = CALL [146, 147, 149, 151, 153]…
+  [PASS] sort=frame: 전체 1,317행이 정렬 키 순서(동점은 frame_id)
+  [PASS] sort=frame: 정렬만 다르고 장면 집합은 같음
+
+== 불변식: 기본 인자로 줄인 sp_search_scenes_ex = sp_search_scenes (행·순서)
+  [PASS] CALL sp_search_scenes(None, None, 0, 2, None, 0, 0) 7,480행 = sp_search_scenes_ex(None, None, None, None, None, None, 0, 0) 7,480행
+  [PASS] CALL sp_search_scenes(4, 20, 0, 3, None, 1, 0) 37행 = sp_search_scenes_ex('[4]', None, 20, '[0, 1, 2, 3]', None, None, 1, 0) 37행
+  [PASS] CALL sp_search_scenes(1, None, 1, 1, 50, 0, 0) 2,069행 = sp_search_scenes_ex('[1]', None, None, '[1]', None, 50, 0, 0) 2,069행
+  [PASS] CALL sp_search_scenes(6, 30, 0, 2, None, 0, 1) 662행 = sp_search_scenes_ex('[6]', None, 30, '[0, 1, 2]', None, None, 0, 1) 662행
+  [PASS] CALL sp_search_scenes(3, 45.5, 2, 3, 100, 1, 0) 5행 = sp_search_scenes_ex('[3]', None, 45.5, '[2, 3]', None, 100, 1, 0) 5행
+
+- 트램 · 5 m 이내 · 관측 부족만 (빈 결과)
+  [PASS] 빈 결과 상태 (CALL 행 수 0)
+  [PASS] 완화 제안 ‘거리 조건을 해제하면 55개가 있습니다.’ = 그 조건을 푼 CALL sp_search_scenes_ex 행 수
+  [PASS]   sp_search_summary('[4]', 30, None, '[1]', None, None, 0, 0) 완화 class: 3,100 = CALL 행 수 3,100
+  [PASS]   sp_search_summary('[4]', 30, None, '[1]', None, None, 0, 0) 완화 dist: 622 = CALL 행 수 622
+  [PASS]   sp_search_summary('[4]', 30, None, '[1]', None, None, 0, 0) 완화 occ: 408 = CALL 행 수 408
+  [PASS]   sp_search_summary('[4, 6]', 10, 40, '[0, 2]', None, None, 1, 0) 완화 low_only: 1,440 = CALL 행 수 1,440
+  [PASS]   sp_search_summary('[4, 6]', 10, 40, '[0, 2]', None, None, 1, 0) 완화 class: 505 = CALL 행 수 505
+  [PASS]   sp_search_summary('[4, 6]', 10, 40, '[0, 2]', None, None, 1, 0) 완화 dist: 385 = CALL 행 수 385
+  [PASS]   sp_search_summary('[4, 6]', 10, 40, '[0, 2]', None, None, 1, 0) 완화 occ: 217 = CALL 행 수 217
+  [PASS]   sp_search_summary('[1]', None, None, '[0, 1, 2, 3]', 20, 200, 0, 1) 완화 points: 6,684 = CALL 행 수 6,684
+  [PASS]   sp_search_summary('[1]', None, None, '[0, 1, 2, 3]', 20, 200, 0, 1) 완화 class: 6,280 = CALL 행 수 6,280
+  [PASS]   sp_search_summary('[1]', None, None, '[0, 1, 2, 3]', 20, 200, 0, 1) 완화 unreviewed: 5,332 = CALL 행 수 5,332
+  [PASS]   sp_search_summary('[1]', None, None, '[0, 1, 2, 3]', 20, 200, 0, 1) 완화 occ: 5,300 = CALL 행 수 5,300
+  [PASS]   sp_search_summary('[7]', None, 5, None, None, None, 1, 0) 완화 dist: 55 = CALL 행 수 55
+  [PASS]   sp_search_summary('[7]', None, 5, None, None, None, 1, 0) 완화 class: 0 = CALL 행 수 0
+  [PASS]   sp_search_summary('[7]', None, 5, None, None, None, 1, 0) 완화 low_only: 0 = CALL 행 수 0
+
+== S2 장면 상세: 화면 ↔ CALL sp_scene_detail, 원본 이미지·점군
+- 장면 000000: 객체 1개, 무시 영역 0개
+  [PASS] HTTP 200
+  [PASS] 객체 표 번호 [1] = CALL 객체 번호(무시 영역 제외)
+  [PASS] 포인트 수·NULL 표시·관측 부족 ⚠가 CALL 값과 같음
+  [PASS] BEV 박스 1개 = 유효 3D 객체 1개
+  [PASS] 이미지 893,783 B
+  [PASS] 점군(ROI) 63,101점 = 1,009,616 B (float32 × 4)
+- 장면 001000: 객체 3개, 무시 영역 1개
+  [PASS] HTTP 200
+  [PASS] 객체 표 번호 [1, 2, 3] = CALL 객체 번호(무시 영역 제외)
+  [PASS] 포인트 수·NULL 표시·관측 부족 ⚠가 CALL 값과 같음
+  [PASS] BEV 박스 3개 = 유효 3D 객체 3개
+  [PASS] 이미지 746,558 B
+  [PASS] 점군(ROI) 58,655점 = 938,480 B (float32 × 4)
+- 장면 005000: 객체 6개, 무시 영역 2개
+  [PASS] HTTP 200
+  [PASS] 객체 표 번호 [1, 2, 3, 4, 5, 6] = CALL 객체 번호(무시 영역 제외)
+  [PASS] 포인트 수·NULL 표시·관측 부족 ⚠가 CALL 값과 같음
+  [PASS] BEV 박스 6개 = 유효 3D 객체 6개
+  [PASS] 이미지 765,625 B
+  [PASS] 점군(ROI) 62,869점 = 1,005,904 B (float32 × 4)
+
+== S5 처리 결과: 결과 파일 ↔ 화면 (U-7)
+  [PASS] 품질 결론 = quality_report.json
+  [PASS] 관측 부족 결론 = analysis_summary.json
+  [PASS] MySQL 적재 대조 62/62
+  [PASS] F-11 대조 100개 장면: 13개 항목 pass=True
+  [PASS] F-11 대조 1,000개 장면: 13개 항목 pass=True
+  [PASS] F-11 대조 7,481개 장면: 13개 항목 pass=True
+  [PASS] 대조 표 통과 표시 39개 = 13 × 3
+  [PASS] 성능: bench/summary.csv 표시
+  [PASS] 그림 7개 모두 200
+  [PASS] 원본 파일 링크 17개 모두 200
+
+== 썸네일·경로 안전성
+  [PASS] /thumbs/0.webp 9,222 B, public, max-age=31536000, immutable
+  [PASS] /thumbs/1000.webp 6,288 B, public, max-age=31536000, immutable
+  [PASS] /thumbs/5000.webp 6,520 B, public, max-age=31536000, immutable
+  [PASS] /thumbs/7480.webp 8,838 B, public, max-age=31536000, immutable
+  [PASS] /thumbs/7481.webp → 404
+  [PASS] /thumbs/..%2F..%2Fetc%2Fpasswd → 404
+  [PASS] /scenes/7481/points.bin → 404
+  [PASS] /pipeline/files/../README.md → 404
+
+== 성능 (서버 쪽, test client, S1 30회)
+  S1 응답 p50 280 ms · p95 338 ms · 최대 354 ms  (목표 p95 ≤ 500 ms)
+  S2 HTML p50 5 ms · p95 6 ms, 검색 위치 포함 p50 277 ms · p95 292 ms, 이미지 p95 1 ms → 첫 표시(서버, 위치 포함) ≈ 292 ms (목표 ≤ 1,000 ms)
+  점군 전송(서버) p50 5 ms · p95 5 ms (목표 BEV 전송+그리기 ≤ 1,500 ms, 그리기는 브라우저 측정 필요)
+  용량 s2_html: 21,234–27,254 B
+  용량 image: 746,558–893,783 B
+  용량 points: 938,480–1,009,616 B
+  용량 thumb: 6,288–9,222 B
+  CSS·JS 페이지별 합 S1 95,900 B, S2 103,658 B, S5 301,338 B (목표 페이지당 ≤ 300 KB = 307,200 B)
+  [PASS] S1 p95 ≤ 500 ms
+  [PASS] S2 첫 표시(HTML + 이미지, 서버) ≤ 1,000 ms
+  [PASS] 썸네일 ≤ 30 KB
+  [PASS] CSS·JS 페이지당 ≤ 300 KB
+
+결과: 실패 0건

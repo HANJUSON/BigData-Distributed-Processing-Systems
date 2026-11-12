@@ -1,0 +1,106 @@
+{#- 입력 컴포넌트: 체크박스, 토글(스위치), 토글 그룹, 이중 범위 슬라이더, 숫자 범위. -#}
+{% from "macros/feedback.html" import tooltip %}
+
+{#- 체크박스. slug를 주면 클래스 색 점을 붙인다(색 + 글자 함께). -#}
+{% macro checkbox(name, value, label, checked=False, slug=None, id=None, hint=None, slash=False) -%}
+{%- set cid = id or (name ~ "-" ~ value) -%}
+<label class="check" for="{{ cid }}">
+  <input type="checkbox" id="{{ cid }}" name="{{ name }}" value="{{ value }}"{% if checked %} checked{% endif %}{% if slash %} data-slash-target{% endif %}>
+  <span class="check__box" aria-hidden="true"></span>
+  {%- if slug %}<span class="cls-dot cls-dot--{{ slug }}" aria-hidden="true"></span>{% endif %}
+  <span class="check__label">{{ label }}</span>
+  {%- if hint %}<span class="check__hint">{{ hint }}</span>{% endif %}
+</label>
+{%- endmacro %}
+
+{#- 켜기/끄기 스위치. info를 주면 ⓘ 툴팁을 붙인다. -#}
+{% macro toggle(name, label, checked=False, id=None, value="1", info=None) -%}
+{%- set tid = id or ("tg-" ~ name) -%}
+<div class="switch-row">
+  <label class="switch" for="{{ tid }}">
+    <input type="checkbox" role="switch" id="{{ tid }}" name="{{ name }}" value="{{ value }}"{% if checked %} checked{% endif %}>
+    <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
+    <span class="switch__label">{{ label }}</span>
+  </label>
+  {%- if info %}{{ tooltip(tid ~ "-info", info, label ~ " 설명") }}{% endif %}
+</div>
+{%- endmacro %}
+
+{#- 누름 토글 그룹(가림 0·1·2). 체크박스 기반이라 폼 제출·URL 동기화가 그대로 된다. -#}
+{% macro toggle_group(name, legend, options, selected=[]) -%}
+<fieldset class="field">
+  <legend class="field__label">{{ legend }}</legend>
+  <div class="seg" role="group">
+    {%- for value, label in options %}
+    <label class="seg__item">
+      <input type="checkbox" name="{{ name }}" value="{{ value }}"{% if value in selected %} checked{% endif %}>
+      <span><span class="num">{{ value }}</span> {{ label }}</span>
+    </label>
+    {%- endfor %}
+  </div>
+</fieldset>
+{%- endmacro %}
+
+{#-
+  이중 범위 슬라이더: range 2개(겹침) + 숫자 입력 2개.
+  - 각 입력에 고유 이름(aria-label)을 준다: “거리 최솟값”, “거리 최댓값”
+  - JS(static/js/app.js · initDualRange)가 네 입력을 동기화하고,
+    최솟값 > 최댓값이면 입력 칸 바로 아래에 오류를 띄운다(9.5).
+  - JS가 없어도 숫자 입력만으로 폼이 동작한다.
+-#}
+{% macro dual_range(id, label, name_min, name_max, min=0, max=100, step=1, value_min=None, value_max=None, unit="") -%}
+{%- set vmin = min if value_min is none else value_min -%}
+{%- set vmax = max if value_max is none else value_max -%}
+<fieldset class="field range2" data-dual-range id="{{ id }}" data-min="{{ min }}" data-max="{{ max }}">
+  <legend class="field__label">{{ label }}{% if unit %} <span class="field__unit">({{ unit }})</span>{% endif %}</legend>
+  <div class="range2__track" style="--lo: {{ ((vmin - min) / (max - min) * 100)|round(2) }}%; --hi: {{ ((vmax - min) / (max - min) * 100)|round(2) }}%;">
+    <span class="range2__fill" aria-hidden="true"></span>
+    <input type="range" class="range2__thumb" data-role="lo-range" min="{{ min }}" max="{{ max }}" step="{{ step }}" value="{{ vmin }}" aria-label="{{ label }} 최솟값" tabindex="0">
+    <input type="range" class="range2__thumb" data-role="hi-range" min="{{ min }}" max="{{ max }}" step="{{ step }}" value="{{ vmax }}" aria-label="{{ label }} 최댓값">
+  </div>
+  <div class="range2__nums">
+    <label class="num-input"><span class="visually-hidden">{{ label }} 최솟값</span>
+      <input type="number" inputmode="numeric" name="{{ name_min }}" data-role="lo-num" min="{{ min }}" max="{{ max }}" step="{{ step }}" value="{{ vmin }}" aria-describedby="{{ id }}-err">
+    </label>
+    <span class="range2__dash" aria-hidden="true">–</span>
+    <label class="num-input"><span class="visually-hidden">{{ label }} 최댓값</span>
+      <input type="number" inputmode="numeric" name="{{ name_max }}" data-role="hi-num" min="{{ min }}" max="{{ max }}" step="{{ step }}" value="{{ vmax }}" aria-describedby="{{ id }}-err">
+    </label>
+    {%- if unit %}<span class="range2__unit" aria-hidden="true">{{ unit }}</span>{% endif %}
+  </div>
+  <p class="field__error" id="{{ id }}-err" aria-live="polite" hidden>{{ ko.STATE_MESSAGES.invalid_range }}</p>
+</fieldset>
+{%- endmacro %}
+
+{#- 숫자 범위(슬라이더 없음): 포인트 수처럼 범위가 큰 값. 같은 검증 규칙. -#}
+{% macro number_range(id, label, name_min, name_max, value_min=None, value_max=None, placeholder_min="최소", placeholder_max="최대") -%}
+<fieldset class="field range2" data-num-range id="{{ id }}">
+  <legend class="field__label">{{ label }}</legend>
+  <div class="range2__nums">
+    <label class="num-input"><span class="visually-hidden">{{ label }} 최솟값</span>
+      <input type="number" inputmode="numeric" min="0" name="{{ name_min }}" data-role="lo-num" placeholder="{{ placeholder_min }}" value="{{ '' if value_min is none else value_min }}" aria-describedby="{{ id }}-err">
+    </label>
+    <span class="range2__dash" aria-hidden="true">–</span>
+    <label class="num-input"><span class="visually-hidden">{{ label }} 최댓값</span>
+      <input type="number" inputmode="numeric" min="0" name="{{ name_max }}" data-role="hi-num" placeholder="{{ placeholder_max }}" value="{{ '' if value_max is none else value_max }}" aria-describedby="{{ id }}-err">
+    </label>
+  </div>
+  <p class="field__error" id="{{ id }}-err" aria-live="polite" hidden>{{ ko.STATE_MESSAGES.invalid_range }}</p>
+</fieldset>
+{%- endmacro %}
+
+{#- 네이티브 select (디자인만 입힘). options: [(value, label)] -#}
+{% macro select(name, label, options, selected=None, id=None, hide_label=False, disabled=False) -%}
+{%- set sid = id or ("sel-" ~ name) -%}
+<div class="field field--inline">
+  <label class="field__label{% if hide_label %} visually-hidden{% endif %}" for="{{ sid }}">{{ label }}</label>
+  <span class="select">
+    <select id="{{ sid }}" name="{{ name }}"{% if disabled %} disabled{% endif %}>
+      {%- for value, text in options %}
+      <option value="{{ value }}"{% if value == selected %} selected{% endif %}>{{ text }}</option>
+      {%- endfor %}
+    </select>
+  </span>
+</div>
+{%- endmacro %}
+

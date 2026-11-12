@@ -1,0 +1,21 @@
+{#-
+  정렬 가능한 표 머리 (9.4 객체 표). <th aria-sort> + 내부 <button>.
+  정렬은 이미 받은 행의 표시 순서만 바꾼다(DB NR-1). JS: initSortableTables.
+  각 <td>에 data-sort="값"을 주면 그 값으로 정렬하고, 없으면 글자로 정렬한다.
+-#}
+{% from "macros/icons.html" import icon %}
+
+{% macro sort_th(label, key, numeric=False, sorted=None, abbr=None) -%}
+<th scope="col" class="{% if numeric %}is-num{% endif %}" data-key="{{ key }}"{% if numeric %} data-numeric{% endif %}
+    aria-sort="{{ {'asc': 'ascending', 'desc': 'descending'}.get(sorted, 'none') }}"{% if abbr %} abbr="{{ abbr }}"{% endif %}>
+  <button type="button" class="th-sort">
+    <span>{{ label }}</span>
+    <span class="th-sort__icon" aria-hidden="true">{{ icon("sort-asc" if sorted == "asc" else ("sort-desc" if sorted == "desc" else "sort"), 14) }}</span>
+  </button>
+</th>
+{%- endmacro %}
+
+{#- 정렬 없는 머리 -#}
+{% macro th(label, numeric=False) -%}
+<th scope="col"{% if numeric %} class="is-num"{% endif %}>{{ label }}</th>
+{%- endmacro %}

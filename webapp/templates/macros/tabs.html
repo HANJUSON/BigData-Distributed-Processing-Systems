@@ -1,0 +1,25 @@
+{#-
+  탭 — WAI-ARIA Tabs 패턴 (자동 활성화).
+  ←/→ 로 이동, Home/End 로 처음·끝, 선택된 탭만 tabindex=0.
+  JS가 없으면 base.html의 <noscript> 규칙으로 모든 패널이 보인다.
+  hash=True면 선택한 탭을 URL 해시(#key)에 담아 링크 공유·새로고침을 지원한다.
+
+  사용:
+    {{ tablist("s5", [("quality", "데이터 품질"), ...], active="quality", label="처리 결과") }}
+    {% call tabpanel("s5", "quality", active="quality") %} … {% endcall %}
+-#}
+
+{% macro tablist(id, tabs, active, label, hash=False) -%}
+<div class="tabs" role="tablist" aria-label="{{ label }}" data-tabs="{{ id }}"{% if hash %} data-tabs-hash{% endif %}>
+  {%- for key, text in tabs %}
+  <button type="button" role="tab" class="tabs__tab" id="{{ id }}-tab-{{ key }}" aria-controls="{{ id }}-panel-{{ key }}"
+          aria-selected="{{ 'true' if key == active else 'false' }}" tabindex="{{ '0' if key == active else '-1' }}" data-key="{{ key }}">{{ text }}</button>
+  {%- endfor %}
+</div>
+{%- endmacro %}
+
+{% macro tabpanel(id, key, active) -%}
+<section role="tabpanel" class="tabs__panel" id="{{ id }}-panel-{{ key }}" aria-labelledby="{{ id }}-tab-{{ key }}" tabindex="0"{% if key != active %} hidden{% endif %}>
+  {{ caller() }}
+</section>
+{%- endmacro %}

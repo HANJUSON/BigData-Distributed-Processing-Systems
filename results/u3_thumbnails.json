@@ -1,0 +1,20 @@
+{
+  "format": "WEBP",
+  "width": 320,
+  "out": "~/data/kitti/work/thumbs",
+  "n_frames": 7481,
+  "n_created": 7481,
+  "n_skipped": 0,
+  "n_failed": 0,
+  "n_missing_image": 0,
+  "n_present": 7481,
+  "missing": [],
+  "failed": [],
+  "bytes_total": 58745674,
+  "bytes_max": 13194,
+  "bytes_mean": 7852.6,
+  "n_over_max_bytes": 0,
+  "max_bytes": 30720,
+  "seconds": 29.109,
+  "workers": 8
+}

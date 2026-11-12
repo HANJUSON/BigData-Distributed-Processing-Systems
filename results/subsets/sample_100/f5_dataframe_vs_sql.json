@@ -1,0 +1,102 @@
+{
+  "method": "row count equality + exceptAll both directions == 0",
+  "queries": {
+    "per_class": {
+      "rows_dataframe": 9,
+      "rows_sql": 9,
+      "schema_dataframe": "struct<class:string,n_objects:bigint,n_valid_3d:bigint,mean_dist_m:double,n_scenes:bigint,sum_points_in_box:bigint>",
+      "schema_sql": "struct<class:string,n_objects:bigint,n_valid_3d:bigint,mean_dist_m:double,n_scenes:bigint,sum_points_in_box:bigint>",
+      "schema_equal": true,
+      "except_dataframe_minus_sql": 0,
+      "except_sql_minus_dataframe": 0,
+      "pass": true,
+      "sql": "SELECT o.class AS class, COUNT(*) AS n_objects, COUNT(CASE WHEN o.valid_3d THEN 1 END) AS n_valid_3d, CAST(AVG(CAST(o.dist_m AS DECIMAL(20,12))) AS DOUBLE) AS mean_dist_m, COUNT(DISTINCT o.frame_id) AS n_scenes, SUM(CAST(o.points_in_box AS BIGINT)) AS sum_points_in_box FROM object_features o JOIN frames f ON o.frame_id = f.frame_id GROUP BY o.class"
+    },
+    "per_scene": {
+      "rows_dataframe": 100,
+      "rows_sql": 100,
+      "schema_dataframe": "struct<frame_id:int,n_points:bigint,n_objects:bigint,n_valid_3d:bigint,n_dontcare:bigint>",
+      "schema_sql": "struct<frame_id:int,n_points:bigint,n_objects:bigint,n_valid_3d:bigint,n_dontcare:bigint>",
+      "schema_equal": true,
+      "except_dataframe_minus_sql": 0,
+      "except_sql_minus_dataframe": 0,
+      "pass": true,
+      "sql": "SELECT f.frame_id AS frame_id, f.n_points AS n_points, COUNT(CASE WHEN o.is_dontcare = false THEN 1 END) AS n_objects, COUNT(CASE WHEN o.valid_3d THEN 1 END) AS n_valid_3d, COUNT(CASE WHEN o.is_dontcare THEN 1 END) AS n_dontcare FROM frames f LEFT JOIN object_features o ON f.frame_id = o.frame_id GROUP BY f.frame_id, f.n_points"
+    }
+  },
+  "pass": true,
+  "per_class_rows": [
+    {
+      "class": "Car",
+      "n_objects": 403,
+      "n_valid_3d": 403,
+      "mean_dist_m": 29.03519992298153,
+      "n_scenes": 92,
+      "sum_points_in_box": 179078
+    },
+    {
+      "class": "Cyclist",
+      "n_objects": 23,
+      "n_valid_3d": 23,
+      "mean_dist_m": 27.39404754060096,
+      "n_scenes": 16,
+      "sum_points_in_box": 5175
+    },
+    {
+      "class": "DontCare",
+      "n_objects": 133,
+      "n_valid_3d": 0,
+      "mean_dist_m": null,
+      "n_scenes": 71,
+      "sum_points_in_box": null
+    },
+    {
+      "class": "Misc",
+      "n_objects": 17,
+      "n_valid_3d": 17,
+      "mean_dist_m": 40.25332362918982,
+      "n_scenes": 12,
+      "sum_points_in_box": 3052
+    },
+    {
+      "class": "Pedestrian",
+      "n_objects": 62,
+      "n_valid_3d": 62,
+      "mean_dist_m": 20.109750335766112,
+      "n_scenes": 23,
+      "sum_points_in_box": 9015
+    },
+    {
+      "class": "Person_sitting",
+      "n_objects": 2,
+      "n_valid_3d": 2,
+      "mean_dist_m": 18.7010852348285,
+      "n_scenes": 1,
+      "sum_points_in_box": 147
+    },
+    {
+      "class": "Tram",
+      "n_objects": 4,
+      "n_valid_3d": 4,
+      "mean_dist_m": 43.0105244399235,
+      "n_scenes": 3,
+      "sum_points_in_box": 8137
+    },
+    {
+      "class": "Truck",
+      "n_objects": 22,
+      "n_valid_3d": 22,
+      "mean_dist_m": 47.103774503052776,
+      "n_scenes": 19,
+      "sum_points_in_box": 11530
+    },
+    {
+      "class": "Van",
+      "n_objects": 34,
+      "n_valid_3d": 34,
+      "mean_dist_m": 34.879181183312205,
+      "n_scenes": 26,
+      "sum_points_in_box": 18405
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S2 장면 상세 · 와이어프레임</title>
+<link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <h1>S2 장면 상세 <span class="mono muted">/scenes/&lt;frame_id&gt;</span></h1>
+    <span class="meta">질문: “이 장면의 객체는 어떻게 보이고 얼마나 관측됐나?” · 소속 공동(F-10, DB FR-2·FR-4) · 데이터 MySQL + 원본 이미지·<code>.bin</code>·<code>calib</code> · <a href="README.md">목록</a></span>
+  </header>
+  <div class="layout">
+    <div>
+      <div class="frame">
+        <div class="wf-header">
+          <span class="wf-brand">KITTI Scene Explorer</span>
+          <nav class="wf-nav"><span class="on">장면 검색</span><span>검수</span><span>분석</span><span>처리 결과</span><span>정보</span></nav>
+          <div class="wf-tools"><span class="btn off">검수자 ▾</span><span class="btn ghost">⌨</span><span class="btn ghost">◐</span></div>
+        </div>
+        <div class="row" style="padding:10px 16px;border-bottom:1px solid var(--line);justify-content:space-between;position:relative;">
+          <div class="row"><span class="m inline">1</span><span class="muted">← 검색 결과 (12 / 1,284)</span><b style="font-size:16px">장면 <span class="mono">000123</span></b></div>
+          <div class="row"><span class="btn">‹ 이전</span><span class="btn">다음 ›</span><span class="btn ghost">🔗 링크 복사</span></div>
+        </div>
+        <div style="padding:16px;display:grid;gap:12px;grid-template-columns:5fr 6fr;">
+          <div class="box dark" style="grid-column:1/-1;padding:0;position:relative;">
+            <span class="m" style="right:8px;top:44px;">2</span>
+            <div class="row" style="justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--dark-2)"><b>카메라 이미지 <span style="font-weight:400;opacity:.7">1242×375 · 2D 박스 + 번호</span></b><span>레이어 ☑박스 ☑라벨 ☐무시 영역</span></div>
+            <div style="aspect-ratio:1242/375;position:relative;">
+              <div style="position:absolute;left:10%;top:40%;width:14%;height:30%;border:2px solid #9aa3b2"><span style="background:#9aa3b2;color:#111;font-size:11px;position:absolute;top:-17px;left:-2px;padding:0 4px">1 차량</span></div>
+              <div style="position:absolute;left:46%;top:38%;width:3%;height:22%;border:2px solid #d6d9e0"><span style="background:#d6d9e0;color:#111;font-size:11px;position:absolute;top:-17px;left:-2px;padding:0 4px;white-space:nowrap">2 보행자</span></div>
+              <div style="position:absolute;left:74%;top:42%;width:2%;height:14%;border:2px dashed #d6d9e0"><span style="background:#d6d9e0;color:#111;font-size:11px;position:absolute;top:-17px;left:-2px;padding:0 4px;white-space:nowrap">3 보행자 · ⚠ 관측 부족</span></div>
+            </div>
+          </div>
+          <div class="box dark" style="padding:0;position:relative;">
+            <span class="m" style="right:8px;top:44px;">3</span>
+            <div class="row" style="justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--dark-2)"><b>LiDAR BEV <span style="font-weight:400;opacity:.7">위에서 본 평면</span></b><span>색상 [높이 ▾] ⊕ ⊖ ↺</span></div>
+            <div style="aspect-ratio:1/1;position:relative;display:grid;place-items:end center;padding-bottom:8px;background:repeating-radial-gradient(circle at 50% 100%, transparent 0 38px, #3a4150 38px 39px);">
+              <span style="position:absolute;left:30%;top:40%;border:2px solid #9aa3b2;width:22px;height:40px">1</span>
+              <span style="position:absolute;left:55%;top:25%;border:2px solid #d6d9e0;width:10px;height:10px"></span>
+              <span>▲ 센서</span>
+            </div>
+            <div style="padding:6px 12px;border-top:1px solid var(--dark-2);font-size:11px;">낮음 ▬▬ 높음 (viridis) · 격자 10 m · 휠 확대 · 드래그 이동</div>
+          </div>
+          <div class="box" style="padding:0;position:relative;">
+            <span class="m" style="right:8px;top:44px;">4</span>
+            <div class="row" style="justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--line)"><b>객체 (7)</b><span class="btn">필터 [전체 ▾]</span></div>
+            <table class="wf">
+              <tr><th>#</th><th>종류</th><th>거리</th><th>가림</th><th>잘림</th><th>포인트</th><th>난이도</th><th>판정</th></tr>
+              <tr><td>1</td><td>● 차량</td><td class="n">12.4 m</td><td>보임</td><td class="n">0.00</td><td class="n">1,842</td><td>쉬움</td><td>✓</td></tr>
+              <tr><td>2</td><td>● 보행자</td><td class="n">31.0 m</td><td>일부</td><td class="n">0.00</td><td class="n">96</td><td>보통</td><td>—</td></tr>
+              <tr style="background:var(--fill)"><td>3</td><td>● 보행자</td><td class="n">47.8 m</td><td>일부</td><td class="n">0.12</td><td class="n">⚠ 9</td><td>어려움</td><td>—</td></tr>
+              <tr><td>4</td><td>● 자전거</td><td class="n">52.3 m</td><td>대부분</td><td class="n">0.00</td><td class="n muted" style="font-family:inherit">계산 안 함(3D 박스 무효)</td><td>등급 외</td><td>—</td></tr>
+            </table>
+            <div class="row" style="padding:10px 12px;border-top:1px solid var(--line);background:var(--fill);position:relative;"><span class="m inline">5</span><b>선택한 객체: 3 보행자</b> → <span class="btn off">판정 남기기</span><span class="muted">헤더에서 검수자를 먼저 선택하세요.</span></div>
+          </div>
+        </div>
+        <div class="wf-footer"><span>데이터 출처 KITTI Vision Benchmark Suite · CC BY-NC-SA 3.0</span><span>용어 정의 · 출처 · 단축키 ?</span></div>
+      </div>
+      <p class="caption">전체 폭 사용(본문 최대 폭 예외). 시각화 영역(이미지·BEV)은 <b>라이트 테마에서도 어두운 바탕</b>.</p>
+
+      <h2 class="sec-title">≤ 1024 px: 이미지 → BEV → 객체 표 세로 배치 · 390 px</h2>
+      <div class="frame frame--mobile">
+        <div class="wf-header"><span class="wf-brand">KITTI Scene Explorer</span><div class="wf-tools">☰</div></div>
+        <div style="padding:12px" class="col">
+          <div class="row"><span class="muted">← 검색 결과</span><b>장면 <span class="mono">000123</span></b></div>
+          <div class="box dark" style="aspect-ratio:1242/375"></div>
+          <div class="box dark" style="aspect-ratio:4/3"></div>
+          <div class="box"><div class="line"></div><div class="line" style="margin-top:6px;width:80%"></div></div>
+          <div class="box fill muted">모바일 화면에서는 검수 입력을 지원하지 않습니다.</div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      <h2>주석</h2>
+      <ol>
+        <li><span class="m inline">1</span><span>검색 결과 안 위치(12 / 1,284)와 이전·다음. 키보드 <kbd>←</kbd>·<kbd>→</kbd> 이동, <kbd>Esc</kbd>로 결과로 복귀(스크롤 위치 복원). 링크 복사.</span></li>
+        <li><span class="m inline">2</span><span>카메라 이미지: 원본 비율 유지, 박스 2 px 실선, 번호 라벨은 박스 왼쪽 위. 무시 영역은 회색 빗금, 기본 꺼짐.</span></li>
+        <li><span class="m inline">3</span><span>BEV(Canvas 2D): 관심 영역·좌표계는 F-6과 동일, 센서 위치·진행 방향·10 m 눈금. 점 색 = 높이 또는 반사 강도(viridis). 점군은 <span class="mono">float32</span> 바이너리(x, y, z, 반사 강도).</span></li>
+        <li><span class="m inline">4</span><span>객체 표: 열 머리로 정렬, ⚠ + 문구로 관측 부족(색만으로 전달 안 함), <span class="mono">NULL</span> 포인트는 “계산 안 함(3D 박스 무효)”.</span></li>
+        <li><span class="m inline">5</span><span><b>연결 강조</b>: 표 행 · 2D 박스 · BEV 박스가 같은 번호·같은 클래스 색. 한 곳에 올리면 세 곳 강조, 클릭하면 선택 고정. 판정(DB 과목)은 검수자 선택 시에만 활성.</span></li>
+      </ol>
+      <dl class="states">
+        <dt>로딩</dt><dd>이미지·표 먼저(≤ 1 s), BEV는 진행 표시줄 “점군 불러오는 중…”.</dd>
+        <dt>부분 성공</dt><dd>이미지는 표시, BEV 자리에 “이 장면의 LiDAR 파일을 찾지 못했습니다(000123.bin)”.</dd>
+        <dt>오류</dt><dd>상세 프로시저 실패 시 오류 블록 + 다시 시도.</dd>
+        <dt>빈 결과</dt><dd>정답 객체 0개 장면: 표 자리에 “이 장면에는 정답 객체가 없습니다”.</dd>
+      </dl>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

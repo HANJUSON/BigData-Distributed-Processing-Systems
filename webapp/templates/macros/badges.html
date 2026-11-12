@@ -1,0 +1,56 @@
+{#-
+  배지·클래스 표지. 색만으로 정보를 전달하지 않는다(9.8):
+  관측 부족은 ⚠ + 문구, 통과·실패는 ✓·✕, 클래스는 색 점 + 이름.
+-#}
+
+{% macro badge(label, tone="neutral", glyph=None, title=None) -%}
+<span class="badge badge--{{ tone }}"{% if title %} title="{{ title }}"{% endif %}>
+  {%- if glyph %}<span class="badge__glyph" aria-hidden="true">{{ glyph }}</span>{% endif %}{{ label }}</span>
+{%- endmacro %}
+
+{#- 관측 부족 (⚠). count를 주면 ‘관측 부족 2’ -#}
+{% macro low_obs(count=None) -%}
+{{ badge("관측 부족" ~ (" " ~ count if count is not none else ""), "warn", "⚠") }}
+{%- endmacro %}
+
+{#- 검수 상태: pending 미검수 / reviewed 검수 완료 / disputed 이견 있음 -#}
+{% macro review_status(status) -%}
+{%- set label = ko.REVIEW_STATUS_LABELS.get(status, status) -%}
+{%- if status == "reviewed" -%}{{ badge(label, "ok", "✓") }}
+{%- elif status == "disputed" -%}{{ badge(label, "danger", "✕") }}
+{%- else -%}{{ badge(label, "neutral", "○") }}
+{%- endif -%}
+{%- endmacro %}
+
+{#- 판정 값 (DB 과목) -#}
+{% macro verdict(value) -%}
+{%- if value is none -%}<span class="muted" aria-label="판정 없음">—</span>
+{%- elif value == "ok" -%}{{ badge(ko.VERDICT_LABELS.ok, "ok", "✓") }}
+{%- elif value == "low_obs" -%}{{ badge(ko.VERDICT_LABELS.low_obs, "warn", "⚠") }}
+{%- else -%}{{ badge(ko.VERDICT_LABELS.get(value, value), "danger", "✕") }}
+{%- endif -%}
+{%- endmacro %}
+
+{#- 난이도 1·2·3 / None = 등급 외. 막대 3칸으로 단계도 보여준다. -#}
+{% macro difficulty(level) -%}
+<span class="diff diff--{{ level if level is not none else 'none' }}">
+  <span class="diff__bars" aria-hidden="true"><i></i><i></i><i></i></span>{{ level|diff_label }}</span>
+{%- endmacro %}
+
+{#- 클래스 표지: 색 점 + 표시 이름 -#}
+{% macro cls_tag(cls, show_label=True) -%}
+<span class="cls-tag"><span class="cls-dot cls-dot--{{ cls|cls_slug }}" aria-hidden="true"></span>{% if show_label %}{{ cls|cls_label }}{% endif %}</span>
+{%- endmacro %}
+
+{#- 객체 번호 표지(이미지·BEV·표에서 같은 번호·같은 색) -#}
+{% macro obj_num(n, cls) -%}
+<span class="obj-num obj-num--{{ cls|cls_slug }}">{{ n }}</span>
+{%- endmacro %}
+
+{#- 통과 ✓ / 실패 ✕ / 해당 없음 — -#}
+{% macro pass_fail(ok) -%}
+{%- if ok is none -%}{{ badge("별도 집계", "neutral", "·") }}
+{%- elif ok -%}{{ badge("통과", "ok", "✓") }}
+{%- else -%}{{ badge("불일치", "danger", "✕") }}
+{%- endif -%}
+{%- endmacro %}

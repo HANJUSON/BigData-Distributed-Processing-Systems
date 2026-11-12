@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% from "macros/icons.html" import icon %}
+{% from "macros/buttons.html" import button, icon_button %}
+{% from "macros/forms.html" import checkbox, toggle, toggle_group, dual_range, number_range %}
+{% from "macros/chips.html" import chip_list %}
+{% from "macros/cards.html" import result_card %}
+{% from "macros/navigation.html" import pagination %}
+{% from "macros/feedback.html" import empty_state, error_state, demo_notice, tooltip, notice, skeleton_cards %}
+
+{% block title %}장면 검색{% endblock %}
+{% block main_class %}page--full{% endblock %}
+
+{% set dmin_b, dmax_b, dstep = dist_bounds %}
+
+{% block content %}
+<h1 class="visually-hidden">장면 검색</h1>
+<div class="explore">
+  {# ------------------------------------------------------------ 조건 패널 #}
+  <aside class="filters" id="filters" aria-labelledby="filters-title">
+    <form id="search-form" method="get" action="{{ url_for('pages.search') }}"
+          data-dmin="{{ dmin_b }}" data-dmax="{{ dmax_b }}" data-sort-default="{{ ko.DEFAULT_SORT }}" data-occ-default="0,1,2">
+      <div class="filters__head">
+        <h2 class="filters__title" id="filters-title">{{ ko.UI.filters }}</h2>
+        <button type="button" class="btn btn--ghost btn--icon filters__close" data-filters-close aria-label="{{ ko.UI.close }}">{{ icon("x", 18) }}</button>
+      </div>
+
+      <div class="filters__group">
+        <div class="field">
+          <label class="field__label" for="preset-select">프리셋</label>
+          <span class="select select--block">
+            <select id="preset-select" name="preset" disabled aria-describedby="preset-why">
+              <option value="">추천 프리셋 선택</option>
+              {%- for p in presets %}<option value="{{ p.key }}">{{ p.label }}</option>{% endfor %}
+            </select>
+          </span>
+          <p class="field__hint" id="preset-why">{{ ko.UI.presets_db_course }}</p>
+        </div>
+      </div>
+
+      <div class="filters__group">
+        <fieldset class="field">
+          <legend class="field__label">객체 종류</legend>
+          <div class="check-grid">
+            {%- for c in ko.SEARCHABLE_CLASSES %}
+            {{ checkbox("cls", c, c|cls_label, c in state.cls, c|cls_slug, id="cls-" ~ c|lower, slash=loop.first) }}
+            {%- endfor %}
+          </div>
+          <p class="field__hint">{{ ko.UI.classes_none }}</p>
+        </fieldset>
+
+        {{ dual_range("dist", "거리", "dmin", "dmax", min=dmin_b, max=dmax_b, step=dstep,
+                      value_min=state.dmin, value_max=state.dmax, unit="m") }}
+        <p class="field__hint">{{ ko.UI.dist_ends }}</p>
+
+        <div data-occ-set>
+          {{ toggle_group("occ", "가림", [(0, "보임"), (1, "일부"), (2, "대부분")], state.occ) }}
+          {{ checkbox("occ", "3", "알 수 없음(3) 포함", 3 in state.occ, id="occ-3") }}
+        </div>
+
+        {{ number_range("pts", "포인트 수", "pmin", "pmax", state.pmin, state.pmax) }}
+      </div>
+
+      <div class="filters__group">
+        {{ toggle("low_obs", "관측 부족만", state.low_obs,
+                  info="3D 박스 안 LiDAR 포인트 수가 클래스별 기준값(하위 10% 값) 이하인 객체입니다. 기준값과 산출 일시는 ‘정보’ 화면에 있습니다.") }}
+        {{ toggle("unreviewed", "미검수만", state.unreviewed, info=ko.UI.unreviewed_note) }}
+        <div class="field">
+          <label class="field__label" for="tag-select">태그</label>
+          <span class="select select--block">
+            <select id="tag-select" name="tag" disabled aria-describedby="tag-why">
+              <option value="">전체 태그</option>
+            </select>
+          </span>
+          <p class="field__hint" id="tag-why">{{ ko.UI.tags_db_course }}</p>
+        </div>
+      </div>
+
+      <div class="filters__foot">
+        {{ button("프리셋으로 저장", "secondary", id="save-preset", disabled_reason="프리셋 저장은 데이터베이스 과목 프로젝트에서 구현합니다.") }}
+        <noscript><button class="btn btn--primary" type="submit">조건 적용</button></noscript>
+      </div>
+    </form>
+  </aside>
+  <div class="filters__scrim" data-filters-close aria-hidden="true"></div>
+
+  {# ------------------------------------------------------------ 결과 #}
+  <section class="results" id="results" aria-labelledby="results-count">
+    <div class="results__bar">
+      <button type="button" class="btn btn--secondary btn--sm results__filters-btn" data-filters-open aria-controls="filters" aria-expanded="false">{{ icon("filter") }}<span>{{ ko.UI.filters }}{% if chips %} · {{ chips|length }}{% endif %}</span></button>
+      <h2 class="results__count" id="results-count" aria-live="polite">
+        {%- if results %}
+        장면 <span class="num">{{ results.total_scenes|int }}</span>개<small>· 객체 <span class="num">{{ results.total_objects|int }}</span>개 일치</small>
+        {%- else %}
+        장면 <span class="num">—</span>
+        {%- endif %}
+      </h2>
+      <div class="results__tools">
+        <div class="field field--inline">
+          <label class="field__label" for="sort-select">정렬</label>
+          <span class="select">
+            <select id="sort-select" name="sort" form="search-form">
+              {%- for key, label in ko.SORT_OPTIONS.items() %}<option value="{{ key }}"{% if state.sort == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+            </select>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {{ chip_list(chips, url_for('pages.search') if chips else None) }}
+
+    {% if results and results.is_demo %}{{ demo_notice() }}{% endif %}
+
+    <div data-results-body>
+      {%- if error %}
+      {{ error_state(error.title, error.body, details=error.details, retry_href=request.full_path) }}
+      {%- elif results.cards %}
+      <ul class="card-grid" role="list">
+        {%- for card in results.cards %}
+        <li>{{ result_card(card, card.href, thumb_src=card.thumb, demo=results.is_demo) }}</li>
+        {%- endfor %}
+      </ul>
+      {{ pagination(state.page, results.pages, page_href) }}
+      {%- else %}
+      {%- set hint = results.relax_hint %}
+      {% call empty_state(ko.STATE_MESSAGES.empty_title,
+                          ko.STATE_MESSAGES.empty_relax.format(field=hint.field, count=hint.count|int) if hint else ko.STATE_MESSAGES.empty_hint) %}
+        {%- if chips %}<a class="btn btn--secondary btn--sm" href="{{ url_for('pages.search') }}">{{ ko.UI.clear_all }}</a>{% endif %}
+      {% endcall %}
+      {%- endif %}
+    </div>
+  </section>
+</div>
+
+{#- 검색이 300 ms보다 오래 걸릴 때 결과 영역에 넣는 결과 카드 모양 스켈레톤 (9.5 로딩) -#}
+<template id="tpl-loading">
+  {{ skeleton_cards(8) }}
+</template>
+
+<template id="tpl-error">
+  {{ error_state(ko.STATE_MESSAGES.error_title, ko.STATE_MESSAGES.error_db, details="(요청 오류)") }}
+</template>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/search.js') }}?v={{ asset_v }}" defer></script>
+{% endblock %}

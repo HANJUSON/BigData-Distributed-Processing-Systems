@@ -1,0 +1,29 @@
+{% extends "pages/db_course.html" %}
+{% block title %}분석 대시보드{% endblock %}
+{% block eyebrow %}S4{% endblock %}
+{% block heading %}분석 대시보드{% endblock %}
+{% block question %}질문 1–4의 답은?{% endblock %}
+
+{% block features %}
+<li><span><strong>질문 1 관측 부족 기준</strong> — 클래스 × 거리 구간별 포인트 수 분위와 현재 기준값·산출 일시, ‘기준값 다시 계산’.</span></li>
+<li><span><strong>질문 2 몰린 조합</strong> — 조합별 관측 부족 비율 순위와 저장된 추천 프리셋, ‘이 조건으로 검색’ 링크.</span></li>
+<li><span><strong>질문 3 자동 기준 vs 사람</strong> — 층별 교차표와 표본 진행률. 120건 미만이면 ‘결과는 잠정’으로 표시합니다.</span></li>
+<li><span><strong>질문 4 태그별 비율</strong> — 태그별 관측 부족 비율과 전체 평균선, 검수 대기열 우선순위.</span></li>
+<li><span><strong>연결</strong> — 막대나 셀을 누르면 그 조건으로 장면 검색이 열립니다.</span></li>
+{% endblock %}
+
+{% block meta %}
+<span class="badge">FR-7 대시보드</span><span class="badge">FR-8 기준값</span><span class="badge">UD-4</span>
+{% endblock %}
+
+{% block preview %}
+<div class="preview__cards">
+  {%- for q, bars in [("질문 1 관측 부족 기준", [40, 72, 55, 90, 30]), ("질문 2 몰린 조합", [88, 64, 50, 34, 20]), ("질문 3 자동 기준 vs 사람", [60, 60, 45, 70, 52]), ("질문 4 태그별 비율", [35, 80, 42, 58, 66])] %}
+  <div class="preview__card">
+    <p class="preview__q">{{ q }}</p>
+    <div class="skel skel--line" style="width: 85%; animation: none"></div>
+    <div class="preview__chart">{% for h in bars %}<i style="height: {{ h }}%"></i>{% endfor %}</div>
+  </div>
+  {%- endfor %}
+</div>
+{% endblock %}

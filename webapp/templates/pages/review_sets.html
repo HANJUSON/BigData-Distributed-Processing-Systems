@@ -1,0 +1,38 @@
+{% extends "pages/db_course.html" %}
+{% block title %}검수 세트{% endblock %}
+{% block eyebrow %}S3{% endblock %}
+{% block heading %}검수 세트{% endblock %}
+{% block question %}검수할 장면 묶음과 진행 상황은?{% endblock %}
+
+{% block features %}
+<li><span><strong>세트 목록</strong> — 이름, 종류(검색·표본), 상태(진행 중·마감), 진행 막대와 ‘완료 / 전체’를 진행 중인 세트부터 보여줍니다.</span></li>
+<li><span><strong>세트 만들기</strong> — 장면 검색 결과 위의 ‘이 결과로 검수 세트 만들기’ 버튼으로 만듭니다. 결과가 0건이면 버튼이 꺼지고 이유가 표시됩니다.</span></li>
+<li><span><strong>표본 세트</strong> — 질문 3의 층화 표본(클래스 × 거리 구간, 120건)을 한 번만 만들고 층별 진행 표를 둡니다.</span></li>
+<li><span><strong>판정 패널</strong> — 장면 상세 오른쪽에서 숫자키 <kbd>1</kbd>–<kbd>4</kbd>로 판정하고 <kbd>Enter</kbd>로 저장한 뒤 다음 항목으로 넘어갑니다.</span></li>
+<li><span><strong>마감·삭제</strong> — 확인 대화상자를 거치며, 판정과 변경 이력은 세트를 지워도 남습니다.</span></li>
+{% endblock %}
+
+{% block meta %}
+<span class="badge">FR-3 세트</span><span class="badge">FR-4 판정</span><span class="badge">UD-2 · UD-3</span>
+{% endblock %}
+
+{% block preview %}
+<div class="preview__row">
+  <div><div class="skel skel--line" style="width: 80%; animation: none"></div></div>
+  <span class="badge">검색 · 진행 중</span>
+  <div class="preview__bar"><span style="width: 53%"></span></div>
+  <span class="num muted">64 / 120</span>
+</div>
+<div class="preview__row">
+  <div><div class="skel skel--line" style="width: 60%; animation: none"></div></div>
+  <span class="badge">표본 · 마감</span>
+  <div class="preview__bar"><span style="width: 100%"></span></div>
+  <span class="num muted">120 / 120</span>
+</div>
+<div class="preview__row">
+  <div><div class="skel skel--line" style="width: 70%; animation: none"></div></div>
+  <span class="badge">검색 · 진행 중</span>
+  <div class="preview__bar"><span style="width: 18%"></span></div>
+  <span class="num muted">9 / 50</span>
+</div>
+{% endblock %}
