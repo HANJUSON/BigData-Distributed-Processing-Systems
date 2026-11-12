@@ -13,17 +13,18 @@
 
   /* ---------------- drawer (≤ 1024 px) ---------------- */
   var panel = document.getElementById("filters");
-  var openers = document.querySelectorAll("[data-filters-open]");
-  var closers = document.querySelectorAll("[data-filters-close]");
+  // 여는 버튼은 결과 영역(#results) 안에 있어 검색할 때마다 innerHTML로 교체된다.
+  // 그래서 요소에 직접 리스너를 붙이지 않고 document에서 위임으로 받는다.
+  function openers() { return document.querySelectorAll("[data-filters-open]"); }
   var lastOpener = null;
   function isDrawer() { return window.matchMedia("(max-width: 1024px)").matches; }
-  function openFilters() {
+  function openFilters(from) {
     if (!isDrawer()) return;
-    lastOpener = document.activeElement;
+    lastOpener = from || document.activeElement;
     panel.classList.add("is-open");
     panel.setAttribute("role", "dialog");
     panel.setAttribute("aria-modal", "true");
-    openers.forEach(function (b) { b.setAttribute("aria-expanded", "true"); });
+    openers().forEach(function (b) { b.setAttribute("aria-expanded", "true"); });
     var first = panel.querySelector("[data-slash-target]");
     if (first) first.focus();
   }
@@ -32,12 +33,17 @@
     panel.classList.remove("is-open");
     panel.removeAttribute("role");
     panel.removeAttribute("aria-modal");
-    openers.forEach(function (b) { b.setAttribute("aria-expanded", "false"); });
+    openers().forEach(function (b) { b.setAttribute("aria-expanded", "false"); });
+    // 열 때 누른 버튼이 그 사이 교체됐으면 새 버튼으로 포커스를 돌려준다
+    if (lastOpener && !lastOpener.isConnected) lastOpener = openers()[0] || null;
     if (lastOpener && lastOpener.focus) lastOpener.focus();
   }
   KSE.openFilters = openFilters;
-  openers.forEach(function (b) { b.addEventListener("click", openFilters); });
-  closers.forEach(function (b) { b.addEventListener("click", closeFilters); });
+  document.addEventListener("click", function (e) {
+    var opener = e.target.closest("[data-filters-open]");
+    if (opener) openFilters(opener);
+    else if (e.target.closest("[data-filters-close]")) closeFilters();
+  });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && panel.classList.contains("is-open")) { e.preventDefault(); closeFilters(); }
   });
@@ -99,6 +105,10 @@
         var fresh = doc.getElementById("results");
         if (!fresh) throw new Error("HTTP " + res.status);
         results.innerHTML = fresh.innerHTML;
+        // 서버가 그린 새 버튼은 aria-expanded="false"이므로 열린 패널 상태에 맞춘다
+        if (panel.classList.contains("is-open")) {
+          openers().forEach(function (b) { b.setAttribute("aria-expanded", "true"); });
+        }
         if (push) { history.pushState({ kse: true }, "", url); shownSearch = location.search; }
         KSE.initSortableTables && KSE.initSortableTables(results);
       })
